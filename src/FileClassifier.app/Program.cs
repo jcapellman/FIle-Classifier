@@ -1,4 +1,4 @@
-﻿using System;
+﻿using FileClassifier.lib;
 
 namespace FileClassifier.app
 {
@@ -6,7 +6,14 @@ namespace FileClassifier.app
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var options = CommandLineParser.Parse(args);
+            
+            if (options == null)
+            {
+                return;
+            }
+
+            Classifier.IsMalicious(options);
         }
     }
 }
