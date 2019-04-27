@@ -8,6 +8,11 @@ namespace FileClassifier.lib
     {
         public static bool IsMalicious(Options option)
         {
+            if (option is null)
+            {
+                throw new ArgumentNullException(nameof(option));
+            }
+
             if (option.Verbose)
             {
                 Console.WriteLine($"Classifying {option.FileName}");
