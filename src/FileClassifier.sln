@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileClassifier.app", "FileClassifier.app\FileClassifier.app.csproj", "{699547EB-32F0-4441-B2C9-DFBDC2C65B26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileClassifier.app", "FileClassifier.app\FileClassifier.app.csproj", "{699547EB-32F0-4441-B2C9-DFBDC2C65B26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileClassifier.lib", "FileClassifier.lib\FileClassifier.lib.csproj", "{60474F36-C246-4E73-8481-6517AC2D7CDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileClassifier.lib", "FileClassifier.lib\FileClassifier.lib.csproj", "{60474F36-C246-4E73-8481-6517AC2D7CDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileClassifier.UnitTests", "FileClassifier.UnitTests\FileClassifier.UnitTests.csproj", "{6D66897A-0A7D-4B09-8A68-8E244293BA54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{60474F36-C246-4E73-8481-6517AC2D7CDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60474F36-C246-4E73-8481-6517AC2D7CDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60474F36-C246-4E73-8481-6517AC2D7CDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D66897A-0A7D-4B09-8A68-8E244293BA54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D66897A-0A7D-4B09-8A68-8E244293BA54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D66897A-0A7D-4B09-8A68-8E244293BA54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D66897A-0A7D-4B09-8A68-8E244293BA54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
