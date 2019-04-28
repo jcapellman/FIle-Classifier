@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.CompilerServices;
+
 using FileClassifier.lib.Common;
+using FileClassifier.lib.ML.Clustering;
 
 [assembly:InternalsVisibleTo("FileClassifier.UnitTests")]
 namespace FileClassifier.lib
@@ -81,6 +83,9 @@ namespace FileClassifier.lib
             Log($"Classifying {_options.FileName}...");
         
             // Classify which file type
+            response = response.DetermineFileGroup();
+
+            Log($"Clustering Result: {response.FileGroup} | Status: {response.Status}");
 
             // Classify if malicious or not based on the type
 
