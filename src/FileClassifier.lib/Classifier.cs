@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 
 using FileClassifier.lib.Common;
+using FileClassifier.lib.ML.Classification;
 using FileClassifier.lib.ML.Clustering;
 
 [assembly:InternalsVisibleTo("FileClassifier.UnitTests")]
@@ -88,6 +89,9 @@ namespace FileClassifier.lib
             Log($"Clustering Result: {response.FileGroup} | Status: {response.Status}");
 
             // Classify if malicious or not based on the type
+            response = response.DetermineClassification();
+
+            Log($"Classification Confidence: {response.Confidence} | Malicious: {response.IsMalicious} | Status: {response.Status}");
 
             return response;
         }
