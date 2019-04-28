@@ -40,15 +40,22 @@ namespace FileClassifier.lib
             return new ClassifierResponseItem(data);
         }
 
+        private void Log(string message)
+        {
+            if (!_options.Verbose)
+            {
+                return;
+            }
+
+            Console.WriteLine($"{DateTime.Now}: {message}");
+        }
+
         public ClassifierResponseItem Classify()
         {
             var response = InitializeResponse(_options.FileName);
 
-            if (_options.Verbose)
-            {
-                Console.WriteLine($"Classifying {_options.FileName}...");
-            }
-
+            Log($"Classifying {_options.FileName}...");
+        
             return response;
         }
     }
