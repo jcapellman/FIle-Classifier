@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
-
+using System.Runtime.CompilerServices;
 using FileClassifier.lib.Common;
 
+[assembly:InternalsVisibleTo("FileClassifier.UnitTests")]
 namespace FileClassifier.lib
 {
     public class Classifier
@@ -15,7 +16,7 @@ namespace FileClassifier.lib
             _options = option;
         }
 
-        internal static void SanityCheckOptions(Options option)
+        private static void SanityCheckOptions(Options option)
         {
             if (option is null)
             {
@@ -35,6 +36,11 @@ namespace FileClassifier.lib
 
         internal ClassifierResponseItem InitializeResponse(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
             byte[] data;
 
             try
@@ -74,6 +80,10 @@ namespace FileClassifier.lib
 
             Log($"Classifying {_options.FileName}...");
         
+            // Classify which file type
+
+            // Classify if malicious or not based on the type
+
             return response;
         }
     }

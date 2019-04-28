@@ -34,5 +34,17 @@ namespace FileClassifier.UnitTests.Library
                 FileName = DateTime.Now.Ticks.ToString()
             });
         }
+
+        #region InitialResponse
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void InitialResponse_Null()
+        {
+            var classifier = new Classifier(new Options {FileName = "test"});
+
+            classifier.InitializeResponse(null);
+        }
+        #endregion
     }
 }
