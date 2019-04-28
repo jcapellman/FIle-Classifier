@@ -15,21 +15,21 @@ namespace FileClassifier.UnitTests.Library
         [ExpectedException(typeof(ArgumentNullException))]
         public void NullOptions()
         {
-            Classifier.IsMalicious(null);
+            Classifier.Classify(null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void NullFileNameOptions()
         {
-            Classifier.IsMalicious(new Options());
+            Classifier.Classify(new Options());
         }
 
         [TestMethod]
         [ExpectedException(typeof(FileNotFoundException))]
         public void FileDoesntExistOptions()
         {
-            Classifier.IsMalicious(new Options
+            Classifier.Classify(new Options
             {
                 FileName = DateTime.Now.Ticks.ToString()
             });

@@ -25,16 +25,18 @@ namespace FileClassifier.lib
             }
         }
 
-        public static bool IsMalicious(Options option)
+        public static ClassifierResponseItem Classify(Options option)
         {
             SanityCheckOptions(option);
+
+            var response = new ClassifierResponseItem();
 
             if (option.Verbose)
             {
                 Console.WriteLine($"Classifying {option.FileName}...");
             }
 
-            return false;
+            return response;
         }
     }
 }
