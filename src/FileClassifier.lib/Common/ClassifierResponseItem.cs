@@ -13,6 +13,8 @@ namespace FileClassifier.lib.Common
 
         public double Confidence { get; set; }
 
+        public bool IsMalicious { get; set; }
+
         public ClassifierStatus Status { get; private set; }
 
         public long SizeInBytes { get; set; }
@@ -48,7 +50,7 @@ namespace FileClassifier.lib.Common
 
         public override string ToString()
         {
-            var output = $"SHA1: {SHA1Hash} | Size (bytes): {SizeInBytes} | File Group: {FileGroup} | Confidence: {Confidence} | Status: {Status}";
+            var output = $"SHA1: {SHA1Hash} | Size (bytes): {SizeInBytes} | File Group: {FileGroup} | Confidence: {Confidence} | Malicious: {IsMalicious} | Status: {Status}";
 
             if (Status == ClassifierStatus.ERROR)
             {
