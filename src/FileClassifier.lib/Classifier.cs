@@ -7,7 +7,7 @@ namespace FileClassifier.lib
 {
     public class Classifier
     {
-        private Options _options;
+        private readonly Options _options;
 
         public Classifier(Options option) {
             SanityCheckOptions(option);
@@ -33,7 +33,7 @@ namespace FileClassifier.lib
             }
         }
 
-        private ClassifierResponseItem InitializeResponse(string fileName)
+        internal ClassifierResponseItem InitializeResponse(string fileName)
         {
             byte[] data;
 
@@ -50,7 +50,7 @@ namespace FileClassifier.lib
             return new ClassifierResponseItem(data);
         }
 
-        private void Log(Exception exception) => Log(exception.ToString());
+        private void Log(Exception exception) => Log($"{exception} (Options: {_options})");
 
         private void Log(string message)
         {
