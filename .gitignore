@@ -9,3 +9,4 @@ src/*/Release/*
 Debug/*
 src/*/Debug/*
 src/Debug/*
+*.user
