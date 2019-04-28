@@ -8,6 +8,8 @@ namespace FileClassifier.lib.Common
 
         public double Confidence { get; set; }
 
+        public long SizeInBytes { get; set; }
+
         public FileGroupType FileGroup { get; set; }
 
         public ClassifierResponseItem()
@@ -17,6 +19,6 @@ namespace FileClassifier.lib.Common
             Confidence = 0.0;
         }
 
-        public override string ToString() => $"SHA1: {SHA1Hash} | File Group: {FileGroup} | Confidence: {Confidence}";
+        public override string ToString() => $"SHA1: {SHA1Hash} | Size (bytes): {SizeInBytes} | File Group: {FileGroup} | Confidence: {Confidence}";
     }
 }
