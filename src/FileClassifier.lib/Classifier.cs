@@ -35,10 +35,22 @@ namespace FileClassifier.lib
 
         private ClassifierResponseItem InitializeResponse(string fileName)
         {
-            var data = File.ReadAllBytes(fileName);
+            byte[] data;
+
+            try
+            {
+                data = File.ReadAllBytes(fileName);
+            } catch (Exception ex)
+            {
+                Log(ex);
+
+                return new ClassifierResponseItem(ex);
+            }
 
             return new ClassifierResponseItem(data);
         }
+
+        private void Log(Exception exception) => Log(exception.ToString());
 
         private void Log(string message)
         {

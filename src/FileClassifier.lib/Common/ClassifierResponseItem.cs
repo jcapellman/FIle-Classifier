@@ -1,4 +1,6 @@
-﻿using FileClassifier.lib.Enums;
+﻿using System;
+
+using FileClassifier.lib.Enums;
 using FileClassifier.lib.Helpers;
 
 namespace FileClassifier.lib.Common
@@ -13,6 +15,8 @@ namespace FileClassifier.lib.Common
 
         public long SizeInBytes { get; set; }
 
+        public Exception Exception { get; private set; }
+
         public FileGroupType FileGroup { get; set; }
 
         public ClassifierResponseItem()
@@ -20,6 +24,11 @@ namespace FileClassifier.lib.Common
             FileGroup = FileGroupType.UNKNOWN;
 
             Confidence = 0.0;
+        }
+
+        public ClassifierResponseItem(Exception exception)
+        {
+            Exception = exception;
         }
 
         public ClassifierResponseItem(byte[] data)
