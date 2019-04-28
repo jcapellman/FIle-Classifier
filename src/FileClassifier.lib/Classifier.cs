@@ -2,7 +2,6 @@
 using System.IO;
 
 using FileClassifier.lib.Common;
-using FileClassifier.lib.Helpers;
 
 namespace FileClassifier.lib
 {
@@ -36,18 +35,9 @@ namespace FileClassifier.lib
 
         private ClassifierResponseItem InitializeResponse(string fileName)
         {
-            var response = new ClassifierResponseItem();
-
             var data = File.ReadAllBytes(fileName);
 
-            response.SHA1Hash = data.ToSHA1();
-
-            if (_options.Verbose)
-            {
-                Console.WriteLine($"Computed SHA1 to {response.SHA1Hash}...");
-            }
-
-            return response;
+            return new ClassifierResponseItem(data);
         }
 
         public ClassifierResponseItem Classify()
