@@ -13,6 +13,8 @@ namespace FileClassifier.lib.Common
 
         public double Confidence { get; set; }
 
+        public ClassifierStatus Status { get; private set; }
+
         public long SizeInBytes { get; set; }
 
         public Exception Exception { get; private set; }
@@ -24,11 +26,15 @@ namespace FileClassifier.lib.Common
             FileGroup = FileGroupType.UNKNOWN;
 
             Confidence = 0.0;
+
+            Status = ClassifierStatus.INCOMPLETE;
         }
 
         public ClassifierResponseItem(Exception exception)
         {
             Exception = exception;
+
+            Status = ClassifierStatus.ERROR;
         }
 
         public ClassifierResponseItem(byte[] data)
@@ -40,6 +46,16 @@ namespace FileClassifier.lib.Common
             SHA1Hash = data.ToSHA1();
         }
 
-        public override string ToString() => $"SHA1: {SHA1Hash} | Size (bytes): {SizeInBytes} | File Group: {FileGroup} | Confidence: {Confidence}";
+        public override string ToString()
+        {
+            var output = $"SHA1: {SHA1Hash} | Size (bytes): {SizeInBytes} | File Group: {FileGroup} | Confidence: {Confidence} | Status: {Status}";
+
+            if (Status == ClassifierStatus.ERROR)
+            {
+                output += $" | {Exception}";
+            }
+
+            return output;
+        }
     }
 }
