@@ -66,6 +66,12 @@ namespace FileClassifier.lib
         {
             var response = InitializeResponse(_options.FileName);
 
+            // If in error on initialization - bail
+            if (response.Status == Enums.ClassifierStatus.ERROR)
+            {
+                return response;
+            }
+
             Log($"Classifying {_options.FileName}...");
         
             return response;
