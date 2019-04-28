@@ -9,7 +9,7 @@ namespace FileClassifier.lib.ML.Clustering
 {
     public static class ClusteringPrediction
     {
-        private static readonly MLContext _mlContext = new MLContext(Common.Constants.ML_SEED);
+        private static readonly MLContext MlContext = new MLContext(Common.Constants.ML_SEED);
 
         private const string MODEL_NAME = "clustering.mdl";
 
@@ -20,9 +20,9 @@ namespace FileClassifier.lib.ML.Clustering
                 throw new ArgumentNullException(nameof(response));
             }
 
-            var model = _mlContext.Model.Load(MODEL_NAME, out var schema);
+            var model = MlContext.Model.Load(MODEL_NAME, out var schema);
 
-            var predictor = _mlContext.Model.CreatePredictionEngine<ClusterData, ClusterDataPrediction>(model);
+            var predictor = MlContext.Model.CreatePredictionEngine<ClusterData, ClusterDataPrediction>(model);
 
             var data = new ClusterData();
 
