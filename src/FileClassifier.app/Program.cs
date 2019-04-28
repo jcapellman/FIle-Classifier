@@ -22,7 +22,9 @@ namespace FileClassifier.app
 
             try
             {
-                var result = Classifier.Classify(options);
+                var classifier = new Classifier(options);
+
+                var result = classifier.Classify();
 
                 Console.WriteLine(result);
             } catch (Exception ex)

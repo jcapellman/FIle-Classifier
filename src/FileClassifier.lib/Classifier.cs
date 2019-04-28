@@ -8,6 +8,14 @@ namespace FileClassifier.lib
 {
     public class Classifier
     {
+        private Options _options;
+
+        public Classifier(Options option) {
+            SanityCheckOptions(option);
+
+            _options = option;
+        }
+
         internal static void SanityCheckOptions(Options option)
         {
             if (option is null)
@@ -26,22 +34,30 @@ namespace FileClassifier.lib
             }
         }
 
-        public static ClassifierResponseItem Classify(Options option)
+        private ClassifierResponseItem InitializeResponse(string fileName)
         {
-            SanityCheckOptions(option);
-
             var response = new ClassifierResponseItem();
 
-            if (option.Verbose)
-            {
-                Console.WriteLine($"Classifying {option.FileName}...");
-            }
-
-            var data = File.ReadAllBytes(option.FileName);
+            var data = File.ReadAllBytes(fileName);
 
             response.SHA1Hash = data.ToSHA1();
 
-            Console.WriteLine($"Computed SHA1 to {response.SHA1Hash}...");
+            if (_options.Verbose)
+            {
+                Console.WriteLine($"Computed SHA1 to {response.SHA1Hash}...");
+            }
+
+            return response;
+        }
+
+        public ClassifierResponseItem Classify()
+        {
+            var response = InitializeResponse(_options.FileName);
+
+            if (_options.Verbose)
+            {
+                Console.WriteLine($"Classifying {_options.FileName}...");
+            }
 
             return response;
         }
