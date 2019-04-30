@@ -1,19 +1,16 @@
 ﻿using System;
 
 using FileClassifier.lib.Common;
+using FileClassifier.lib.ML.Base;
 using FileClassifier.lib.ML.Clustering.Objects;
-
-using Microsoft.ML;
 
 namespace FileClassifier.lib.ML.Clustering
 {
-    public static class ClusteringPrediction
+    public class ClusteringEngine : BasePrediction
     {
-        private static readonly MLContext MlContext = new MLContext(Common.Constants.ML_SEED);
+        protected override string MODEL_NAME => "clustering.mdl";
 
-        private const string MODEL_NAME = "clustering.mdl";
-
-        public static ClassifierResponseItem DetermineFileGroup(this ClassifierResponseItem response)
+        public override ClassifierResponseItem Predict(ClassifierResponseItem response)
         {
             if (response == null)
             {
