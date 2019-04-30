@@ -1,19 +1,16 @@
 ﻿using System;
 
 using FileClassifier.lib.Common;
+using FileClassifier.lib.ML.Base;
 using FileClassifier.lib.ML.Classification.Objects;
-
-using Microsoft.ML;
 
 namespace FileClassifier.lib.ML.Classification
 {
-    public static class ClassificationPrediction
+    public class ClassificationEngine : BasePrediction
     {
-        private static readonly MLContext MlContext = new MLContext(Common.Constants.ML_SEED);
+        protected override string MODEL_NAME => "classification.mdl";
 
-        private const string MODEL_NAME = "classification.mdl";
-
-        public static ClassifierResponseItem DetermineClassification(this ClassifierResponseItem response)
+        public override ClassifierResponseItem Predict(ClassifierResponseItem response)
         {
             if (response == null)
             {
