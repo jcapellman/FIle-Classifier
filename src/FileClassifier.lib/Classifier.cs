@@ -84,12 +84,12 @@ namespace FileClassifier.lib
             Log($"Classifying {_options.FileName}...");
         
             // Classify which file type
-            response = response.DetermineFileGroup();
+            response = new ClusteringEngine().Predict(response);
 
             Log($"Clustering Result: {response.FileGroup} | Status: {response.Status}");
 
             // Classify if malicious or not based on the type
-            response = response.DetermineClassification();
+            response = new ClassificationEngine().Predict(response);
 
             Log($"Classification Confidence: {response.Confidence} | Malicious: {response.IsMalicious} | Status: {response.Status}");
 
