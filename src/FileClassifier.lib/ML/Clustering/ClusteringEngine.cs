@@ -1,6 +1,4 @@
-﻿using System;
-
-using FileClassifier.lib.Common;
+﻿using FileClassifier.lib.Common;
 using FileClassifier.lib.ML.Base;
 using FileClassifier.lib.ML.Clustering.Objects;
 
@@ -10,21 +8,8 @@ namespace FileClassifier.lib.ML.Clustering
     {
         protected override string MODEL_NAME => "clustering.mdl";
 
-        public override ClassifierResponseItem Predict(ClassifierResponseItem response)
+        protected override ClassifierResponseItem UpdateResponse(ClusterDataPrediction prediction, ClassifierResponseItem response)
         {
-            if (response == null)
-            {
-                throw new ArgumentNullException(nameof(response));
-            }
-
-            var model = MlContext.Model.Load(MODEL_NAME, out var schema);
-
-            var predictor = MlContext.Model.CreatePredictionEngine<ClusterData, ClusterDataPrediction>(model);
-
-            var data = FeatureExtraction(response);
-
-            var result = predictor.Predict(data);
-
             // TODO: Map Id to Group
 
             // TODO: Set the Group in the response
