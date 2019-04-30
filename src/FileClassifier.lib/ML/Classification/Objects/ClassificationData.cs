@@ -1,8 +1,10 @@
-﻿using Microsoft.ML.Data;
+﻿using FileClassifier.lib.ML.Base.Objects;
+
+using Microsoft.ML.Data;
 
 namespace FileClassifier.lib.ML.Classification.Objects
 {
-    public class ClassificationData
+    public class ClassificationData : BaseData
     {
         [LoadColumn(0)]
         public string NGramText;

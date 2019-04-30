@@ -6,7 +6,7 @@ using FileClassifier.lib.ML.Clustering.Objects;
 
 namespace FileClassifier.lib.ML.Clustering
 {
-    public class ClusteringEngine : BasePrediction
+    public class ClusteringEngine : BasePrediction<ClusterData, ClusterDataPrediction>
     {
         protected override string MODEL_NAME => "clustering.mdl";
 
@@ -21,9 +21,7 @@ namespace FileClassifier.lib.ML.Clustering
 
             var predictor = MlContext.Model.CreatePredictionEngine<ClusterData, ClusterDataPrediction>(model);
 
-            var data = new ClusterData();
-
-            // TODO: Feature Extraction
+            var data = FeatureExtraction(response);
 
             var result = predictor.Predict(data);
 
@@ -32,6 +30,11 @@ namespace FileClassifier.lib.ML.Clustering
             // TODO: Set the Group in the response
 
             return response;
+        }
+
+        public override ClusterData FeatureExtraction(ClassifierResponseItem response)
+        {
+            return new ClusterData();
         }
     }
 }

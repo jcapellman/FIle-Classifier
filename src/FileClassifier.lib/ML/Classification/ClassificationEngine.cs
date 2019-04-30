@@ -6,7 +6,7 @@ using FileClassifier.lib.ML.Classification.Objects;
 
 namespace FileClassifier.lib.ML.Classification
 {
-    public class ClassificationEngine : BasePrediction
+    public class ClassificationEngine : BasePrediction<ClassificationData, ClassificationDataPrediction>
     {
         protected override string MODEL_NAME => "classification.mdl";
 
@@ -21,9 +21,7 @@ namespace FileClassifier.lib.ML.Classification
 
             var predictor = MlContext.Model.CreatePredictionEngine<ClassificationData, ClassificationDataPrediction>(model);
 
-            var data = new ClassificationData();
-
-            // TODO: Feature Extraction
+            var data = FeatureExtraction(response);
 
             var result = predictor.Predict(data);
 
@@ -31,6 +29,11 @@ namespace FileClassifier.lib.ML.Classification
             response.IsMalicious = result.Prediction;
 
             return response;
+        }
+
+        public override ClassificationData FeatureExtraction(ClassifierResponseItem response)
+        {
+            return new ClassificationData();
         }
     }
 }
