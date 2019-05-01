@@ -38,7 +38,7 @@ namespace FileClassifier.UnitTests.Library
         #region InitialResponse
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(FileNotFoundException))]
         public void InitialResponse_Null()
         {
             var classifier = new Classifier(new Options {FileName = "test"});
