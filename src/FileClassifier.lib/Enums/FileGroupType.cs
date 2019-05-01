@@ -2,11 +2,11 @@
 {
     public enum FileGroupType
     {
-        EXECUTABLE,
-        IMAGE,
-        VIDEO,
-        DOCUMENT,
-        SCRIPT,
-        UNKNOWN
+        EXECUTABLE = 1,
+        IMAGE = 2,
+        VIDEO = 3,
+        DOCUMENT = 4,
+        SCRIPT = 5,
+        UNKNOWN =  6
     }
 }
