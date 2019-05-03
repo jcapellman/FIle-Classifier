@@ -26,9 +26,9 @@ namespace FileClassifier.lib.ML.Clustering
             return new ClusterData();
         }
 
-        public override bool TrainModel(string dataFile)
+        public override bool TrainModel(Options options)
         {
-            var dataView = MlContext.Data.LoadFromTextFile<ClusterData>(dataFile, hasHeader: false, separatorChar: ',');
+            var dataView = MlContext.Data.LoadFromTextFile<ClusterData>(options.FileName, hasHeader: false, separatorChar: ',');
 
             var featuresColumnName = "Features";
 
