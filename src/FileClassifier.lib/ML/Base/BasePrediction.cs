@@ -34,5 +34,7 @@ namespace FileClassifier.lib.ML.Base
         protected abstract ClassifierResponseItem UpdateResponse(TK prediction, ClassifierResponseItem response);
 
         public abstract T FeatureExtraction(ClassifierResponseItem response);
+
+        public abstract bool TrainModel(string dataFile);
     }
 }
