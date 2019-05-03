@@ -20,5 +20,10 @@ namespace FileClassifier.lib.ML.Classification
         {
             return new ClassificationData();
         }
+
+        public override bool TrainModel(string dateFile)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
