@@ -7,6 +7,9 @@ namespace FileClassifier.lib.ML.Clustering.Objects
     public class ClusterData : BaseData
     {
         [LoadColumn(0)]
-        public string Grams;
+        public float Size;
+
+        [LoadColumn(1)]
+        public float Grams;
     }
 }

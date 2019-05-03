@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 using FileClassifier.lib.Common;
 using FileClassifier.lib.Enums;
@@ -32,12 +33,12 @@ namespace FileClassifier.lib.ML.Clustering
             var featuresColumnName = "Features";
 
             var pipeline = MlContext.Transforms
-                .Concatenate(featuresColumnName, "Grams")
-                .Append(MlContext.Clustering.Trainers.KMeans(featuresColumnName, numberOfClusters: 3));
+                .Concatenate(featuresColumnName, "Size", "Grams")
+                .Append(MlContext.Clustering.Trainers.KMeans(featuresColumnName, numberOfClusters: Enum.GetNames(typeof(FileGroupType)).Length));
 
             var model = pipeline.Fit(dataView);
 
-            using (var fileStream = new FileStream(MODEL_NAME, FileMode.Create, FileAccess.Write, FileShare.Write))
+            using (var fileStream = new FileStream(MODEL_NAME, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
             {
                 MlContext.Model.Save(model, dataView.Schema, fileStream);
             }
