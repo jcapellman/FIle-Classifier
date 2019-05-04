@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 using FileClassifier.lib.Common;
 using FileClassifier.lib.ML.Base.Objects;
@@ -29,6 +33,26 @@ namespace FileClassifier.lib.ML.Base
             var result = predictor.Predict(data);
 
             return UpdateResponse(result, response);
+        }
+
+        protected string FeatureExtractFolder(TrainerCommandLineOptions options)
+        {
+            var fileName = Path.GetTempFileName();
+
+            var files = Directory.GetFiles(options.FolderOfData);
+
+            var extractions = new ConcurrentQueue<T>();
+
+            Parallel.ForEach(files, file =>
+            {
+                var extraction = FeatureExtraction(new ClassifierResponseItem(File.ReadAllBytes(file), file));
+
+                extractions.Enqueue(extraction);
+            });
+
+            File.WriteAllText(fileName, string.Join(System.Environment.NewLine, extractions.Select(a => a)));
+
+            return fileName;
         }
 
         protected abstract ClassifierResponseItem UpdateResponse(TK prediction, ClassifierResponseItem response);
