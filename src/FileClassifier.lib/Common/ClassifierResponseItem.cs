@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
 using FileClassifier.lib.Enums;
@@ -52,7 +53,25 @@ namespace FileClassifier.lib.Common
             var groupType = Enum.GetNames(typeof(FileGroupType))
                 .FirstOrDefault(a => fileName.Contains(a, StringComparison.InvariantCultureIgnoreCase));
 
-            return string.IsNullOrEmpty(groupType) ? FileGroupType.UNKNOWN : Enum.Parse<FileGroupType>(groupType);
+            if (!string.IsNullOrEmpty(groupType))
+            {
+                return Enum.Parse<FileGroupType>(groupType);
+            }
+
+            var extension = Path.GetExtension(fileName).ToLower();
+
+            switch (extension)
+            {
+                case ".jpg":
+                case ".png":
+                    return FileGroupType.IMAGE;
+                case ".exe":
+                    return FileGroupType.EXECUTABLE;
+                case ".mp4":
+                    return FileGroupType.VIDEO;
+            }
+
+            return FileGroupType.UNKNOWN;
         }
 
         public ClassifierResponseItem(byte[] data, string fileName)
