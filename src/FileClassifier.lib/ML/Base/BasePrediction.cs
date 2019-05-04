@@ -35,6 +35,6 @@ namespace FileClassifier.lib.ML.Base
 
         public abstract T FeatureExtraction(ClassifierResponseItem response);
 
-        public abstract bool TrainModel(Options options);
+        public abstract bool TrainModel(TrainerCommandLineOptions options);
     }
 }

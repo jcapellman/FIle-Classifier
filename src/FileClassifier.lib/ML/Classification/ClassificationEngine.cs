@@ -21,7 +21,7 @@ namespace FileClassifier.lib.ML.Classification
             return new ClassificationData();
         }
 
-        public override bool TrainModel(Options options)
+        public override bool TrainModel(TrainerCommandLineOptions options)
         {
             throw new System.NotImplementedException();
         }
