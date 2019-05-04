@@ -5,36 +5,36 @@ using FileClassifier.lib.Common;
 
 namespace FileClassifier.Trainer
 {
-    public class CommandLineParser
+    public class TrainerCommandLineParser
     {
-        public static Options Parse(string[] args)
+        public static TrainerCommandLineOptions Parse(string[] args)
         {
-            Options options = null;
+            TrainerCommandLineOptions options = null;
 
             Option oVerbose = new Option(
                 "--verbose",
                 "Enable verbose output",
                 new Argument<bool>(defaultValue: false));
 
-            Option oFile = new Option(
-                "--trainingfile",
-                "File to be parsed to build the model",
+            Option oFolder = new Option(
+                "--folderofdata",
+                "Folder containing data to be parsed to build the model",
                 new Argument<string>());
 
             var rootCommand = new RootCommand
             {
-                Description = "File Classifier Trainer builds a model"
+                Description = "File Trainer builds a model"
             };
 
-            rootCommand.AddOption(oFile);
+            rootCommand.AddOption(oFolder);
             rootCommand.AddOption(oVerbose);
             rootCommand.TreatUnmatchedTokensAsErrors = true;
 
             rootCommand.Argument.AddValidator(symbolResult =>
             {
-                if (symbolResult.Children["--file"] is null)
+                if (symbolResult.Children["--folderofdata"] is null)
                 {
-                    return "Filename is required";
+                    return "Folder Path is required";
                 }
                 else
                 {
@@ -42,16 +42,16 @@ namespace FileClassifier.Trainer
                 }
             });
 
-            rootCommand.Handler = CommandHandler.Create<string, bool>((fileName, verbose) =>
+            rootCommand.Handler = CommandHandler.Create<string, bool>((folderPath, verbose) =>
             {
-                if (string.IsNullOrEmpty(fileName))
+                if (string.IsNullOrEmpty(folderPath))
                 {
                     return;
                 }
 
-                options = new Options
+                options = new TrainerCommandLineOptions
                 {
-                    FileName = fileName,
+                    FolderOfData = folderPath,
                     Verbose = verbose
                 };
             });
