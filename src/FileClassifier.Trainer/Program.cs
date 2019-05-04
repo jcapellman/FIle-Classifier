@@ -10,14 +10,14 @@ namespace FileClassifier.Trainer
         static void Main(string[] args)
         {
 #if RELEASE
-            var options = CommandLineParser.Parse(args);
+            var options = TrainerCommandLineParser.Parse(args);
             
             if (options == null)
             {
                 return;
             }
 #else
-            var options = new Options { FileName = args[0], Verbose = true };
+            var options = new TrainerCommandLineOptions() { FolderOfData = args[0], Verbose = true };
 #endif
 
             try
