@@ -39,13 +39,15 @@ namespace FileClassifier.lib.Common
             Status = ClassifierStatus.ERROR;
         }
 
-        public ClassifierResponseItem(byte[] data)
+        public ClassifierResponseItem(byte[] data, FileGroupType fileGroup = FileGroupType.UNKNOWN)
         {
             Data = data;
 
             SizeInBytes = data.Length;
 
             SHA1Hash = data.ToSHA1();
+
+            FileGroup = fileGroup;
         }
 
         public override string ToString()
