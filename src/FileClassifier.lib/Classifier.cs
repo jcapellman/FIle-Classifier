@@ -56,7 +56,7 @@ namespace FileClassifier.lib
                 return new ClassifierResponseItem(ex);
             }
 
-            return new ClassifierResponseItem(data);
+            return new ClassifierResponseItem(data, fileName);
         }
 
         private void Log(Exception exception) => Log($"{exception} (Options: {_options})");

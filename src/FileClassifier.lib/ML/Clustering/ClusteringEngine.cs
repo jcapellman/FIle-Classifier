@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 using FileClassifier.lib.Common;
 using FileClassifier.lib.Enums;
@@ -26,7 +23,13 @@ namespace FileClassifier.lib.ML.Clustering
 
         public override ClusterData FeatureExtraction(ClassifierResponseItem response)
         {
-            return new ClusterData();
+            var clusterData = new ClusterData
+            {
+                Size = response.SizeInBytes,
+                Grams = float.MinValue
+            };
+
+            return clusterData;
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)
