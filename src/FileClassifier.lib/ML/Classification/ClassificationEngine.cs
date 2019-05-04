@@ -16,9 +16,9 @@ namespace FileClassifier.lib.ML.Classification
             return response;
         }
 
-        public override ClassificationData FeatureExtraction(ClassifierResponseItem response)
+        public override (ClassificationData Data, string Output) FeatureExtraction(ClassifierResponseItem response)
         {
-            return new ClassificationData();
+            return (new ClassificationData(), string.Empty);
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)

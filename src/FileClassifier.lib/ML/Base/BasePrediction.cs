@@ -30,7 +30,7 @@ namespace FileClassifier.lib.ML.Base
 
             var data = FeatureExtraction(response);
 
-            var result = predictor.Predict(data);
+            var result = predictor.Predict(data.Data);
 
             return UpdateResponse(result, response);
         }
@@ -41,23 +41,23 @@ namespace FileClassifier.lib.ML.Base
 
             var files = Directory.GetFiles(options.FolderOfData);
 
-            var extractions = new ConcurrentQueue<T>();
+            var extractions = new ConcurrentQueue<string>();
 
             Parallel.ForEach(files, file =>
             {
                 var extraction = FeatureExtraction(new ClassifierResponseItem(File.ReadAllBytes(file), file));
 
-                extractions.Enqueue(extraction);
+                extractions.Enqueue(extraction.Output);
             });
 
-            File.WriteAllText(fileName, string.Join(System.Environment.NewLine, extractions.Select(a => a)));
+            File.WriteAllText(fileName, string.Join(System.Environment.NewLine, extractions));
 
             return fileName;
         }
 
         protected abstract ClassifierResponseItem UpdateResponse(TK prediction, ClassifierResponseItem response);
 
-        public abstract T FeatureExtraction(ClassifierResponseItem response);
+        public abstract (T Data, string Output) FeatureExtraction(ClassifierResponseItem response);
 
         public abstract bool TrainModel(TrainerCommandLineOptions options);
     }

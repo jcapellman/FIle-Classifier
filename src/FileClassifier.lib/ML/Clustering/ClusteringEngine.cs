@@ -21,15 +21,15 @@ namespace FileClassifier.lib.ML.Clustering
             return response;
         }
 
-        public override ClusterData FeatureExtraction(ClassifierResponseItem response)
+        public override (ClusterData Data, string Output) FeatureExtraction(ClassifierResponseItem response)
         {
             var clusterData = new ClusterData
             {
                 Size = response.SizeInBytes,
                 Grams = float.MinValue
             };
-
-            return clusterData;
+            
+            return (clusterData, $"{clusterData.Size},{clusterData.Grams},{response.FileGroup}");
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)
