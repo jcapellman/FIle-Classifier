@@ -26,36 +26,7 @@ namespace FileClassifier.lib.ML.Clustering
 
         public override ClusterData FeatureExtraction(ClassifierResponseItem response)
         {
-            
             return new ClusterData();
-        }
-
-        private static FileGroupType GetGroupType(string fileName)
-        {
-            var groupType = Enum.GetNames(typeof(FileGroupType))
-                .FirstOrDefault(a => fileName.Contains(a, StringComparison.InvariantCultureIgnoreCase));
-
-            return string.IsNullOrEmpty(groupType) ? FileGroupType.UNKNOWN : Enum.Parse<FileGroupType>(groupType);
-        }
-
-        private string FeatureExtractFolder(TrainerCommandLineOptions options)
-        {
-            var fileName = Path.GetTempFileName();
-
-            var files = Directory.GetFiles(options.FolderOfData);
-
-            var extractions = new ConcurrentQueue<ClusterData>();
-
-            Parallel.ForEach(files, file =>
-            {
-                var extraction = FeatureExtraction(new ClassifierResponseItem(File.ReadAllBytes(file)));
-
-                extractions.Enqueue(extraction);
-            });
-
-            File.WriteAllText(fileName, string.Join(System.Environment.NewLine, extractions.Select(a => a)));
-
-            return fileName;
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)
