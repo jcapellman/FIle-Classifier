@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using FileClassifier.lib.Enums;
 using FileClassifier.lib.Helpers;
@@ -8,6 +9,8 @@ namespace FileClassifier.lib.Common
     public class ClassifierResponseItem
     {
         public byte[] Data { get; private set; }
+
+        public string FileName { get; private set; }
 
         public string SHA1Hash { get; set; }
 
@@ -39,15 +42,30 @@ namespace FileClassifier.lib.Common
             Status = ClassifierStatus.ERROR;
         }
 
-        public ClassifierResponseItem(byte[] data, FileGroupType fileGroup = FileGroupType.UNKNOWN)
+        private static FileGroupType GetGroupType(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return FileGroupType.UNKNOWN;
+            }
+
+            var groupType = Enum.GetNames(typeof(FileGroupType))
+                .FirstOrDefault(a => fileName.Contains(a, StringComparison.InvariantCultureIgnoreCase));
+
+            return string.IsNullOrEmpty(groupType) ? FileGroupType.UNKNOWN : Enum.Parse<FileGroupType>(groupType);
+        }
+
+        public ClassifierResponseItem(byte[] data, string fileName)
         {
             Data = data;
+
+            FileName = fileName;
 
             SizeInBytes = data.Length;
 
             SHA1Hash = data.ToSHA1();
 
-            FileGroup = fileGroup;
+            FileGroup = GetGroupType(FileName);
         }
 
         public override string ToString()
