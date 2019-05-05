@@ -1,6 +1,7 @@
 ﻿using FileClassifier.lib.Common;
 using FileClassifier.lib.ML.Base;
 using FileClassifier.lib.ML.Classification.Objects;
+using FileClassifier.lib.Options;
 
 namespace FileClassifier.lib.ML.Classification
 {

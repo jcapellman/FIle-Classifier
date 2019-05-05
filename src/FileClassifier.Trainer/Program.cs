@@ -1,7 +1,8 @@
 ﻿using System;
 
-using FileClassifier.lib.Common;
+using FileClassifier.lib.Enums;
 using FileClassifier.lib.ML.Clustering;
+using FileClassifier.lib.Options;
 
 namespace FileClassifier.Trainer
 {
@@ -17,7 +18,7 @@ namespace FileClassifier.Trainer
                 return;
             }
 #else
-            var options = new TrainerCommandLineOptions() { FolderOfData = args[0], Verbose = true };
+            var options = new TrainerCommandLineOptions() { FolderOfData = args[0], LogLevel = LogLevels.DEBUG };
 #endif
 
             try

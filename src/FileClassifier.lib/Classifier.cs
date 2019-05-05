@@ -2,24 +2,25 @@
 using System.IO;
 using System.Runtime.CompilerServices;
 
+using FileClassifier.lib.Base;
 using FileClassifier.lib.Common;
-using FileClassifier.lib.ML.Classification;
 using FileClassifier.lib.ML.Clustering;
+using FileClassifier.lib.Options;
 
 [assembly:InternalsVisibleTo("FileClassifier.UnitTests")]
 namespace FileClassifier.lib
 {
     public class Classifier
     {
-        private readonly Options _options;
+        private readonly ClassifierCommandLineOptions _options;
 
-        public Classifier(Options option) {
+        public Classifier(ClassifierCommandLineOptions option) {
             SanityCheckOptions(option);
 
             _options = option;
         }
 
-        private static void SanityCheckOptions(Options option)
+        private static void SanityCheckOptions(ClassifierCommandLineOptions option)
         {
             if (option is null)
             {
@@ -51,24 +52,12 @@ namespace FileClassifier.lib
                 data = File.ReadAllBytes(fileName);
             } catch (Exception ex)
             {
-                Log(ex);
+                Logger<ClassifierCommandLineOptions>.Error(ex, _options);
 
                 return new ClassifierResponseItem(ex);
             }
 
             return new ClassifierResponseItem(data, fileName);
-        }
-
-        private void Log(Exception exception) => Log($"{exception} (Options: {_options})");
-
-        private void Log(string message)
-        {
-            if (!_options.Verbose)
-            {
-                return;
-            }
-
-            Console.WriteLine($"{DateTime.Now}: {message}");
         }
 
         public ClassifierResponseItem Classify()
@@ -81,12 +70,12 @@ namespace FileClassifier.lib
                 return response;
             }
 
-            Log($"Classifying {_options.FileName}...");
+            Logger<ClassifierCommandLineOptions>.Debug($"Classifying {_options.FileName}...", _options);
         
             // Classify which file type
             response = new ClusteringEngine().Predict(response);
 
-            Log($"Clustering Result: {response.FileGroup} | Status: {response.Status}");
+            Logger<ClassifierCommandLineOptions>.Debug($"Clustering Result: {response.FileGroup} | Status: {response.Status}", _options);
 
             // Classify if malicious or not based on the type
             //response = new ClassificationEngine().Predict(response);

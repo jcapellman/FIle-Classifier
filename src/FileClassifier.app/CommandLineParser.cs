@@ -1,22 +1,23 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
 
-using FileClassifier.lib.Common;
+using FileClassifier.lib.Enums;
+using FileClassifier.lib.Options;
 
 namespace FileClassifier.app
 {
     public class CommandLineParser
     {
-        public static Options Parse(string[] args)
+        public static ClassifierCommandLineOptions Parse(string[] args)
         {
-            Options options = null;
+            ClassifierCommandLineOptions options = null;
 
-            Option oVerbose = new Option(
+            var oVerbose = new Option(
                 "--verbose",
                 "Enable verbose output",
                 new Argument<bool>(defaultValue: false));
             
-            Option oFile = new Option(
+            var oFile = new Option(
                 "--file",
                 "File to be scanned (Required)",
                 new Argument<string>());
@@ -49,10 +50,10 @@ namespace FileClassifier.app
                     return;
                 }
 
-                options = new Options
+                options = new ClassifierCommandLineOptions
                 {
                     FileName = fileName,
-                    Verbose = verbose
+                    LogLevel = LogLevels.DEBUG
                 };
             });
 

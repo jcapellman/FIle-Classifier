@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using FileClassifier.lib.Base;
 using FileClassifier.lib.Common;
 using FileClassifier.lib.Enums;
 using FileClassifier.lib.ML.Base;
 using FileClassifier.lib.ML.Clustering.Objects;
+using FileClassifier.lib.Options;
 
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -25,7 +27,7 @@ namespace FileClassifier.lib.ML.Clustering
             return response;
         }
 
-        private static Regex StringRex;
+        private static Regex _stringRex;
 
         public override (ClusterData Data, string Output) FeatureExtraction(ClassifierResponseItem response)
         {
@@ -41,8 +43,15 @@ namespace FileClassifier.lib.ML.Clustering
                 using (var streamReader = new StreamReader(ms, Encoding.GetEncoding(1252), false, 2048, false)) {
                     while (!streamReader.EndOfStream)
                     {
+                        var line = streamReader.ReadLine();
+
+                        if (string.IsNullOrEmpty(line))
+                        {
+                            continue;
+                        }
+
                         stringLines.Append(string.Join(string.Empty,
-                            StringRex.Matches(streamReader.ReadLine()).OfType<Match>().Where(a => !string.IsNullOrEmpty(a.Value) && !string.IsNullOrWhiteSpace(a.Value)).ToList()));
+                            _stringRex.Matches(line).Where(a => !string.IsNullOrEmpty(a.Value) && !string.IsNullOrWhiteSpace(a.Value)).ToList()));
                     }
                 }                
             }
@@ -54,7 +63,7 @@ namespace FileClassifier.lib.ML.Clustering
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            StringRex = new Regex(pattern: @"[ -~\t]{8,}", RegexOptions.Compiled);
+            _stringRex = new Regex(@"[ -~\t]{8,}", RegexOptions.Compiled);
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)
@@ -72,7 +81,7 @@ namespace FileClassifier.lib.ML.Clustering
                 hasHeader: false,
                 separatorChar: ',');
 
-            DataOperationsCatalog.TrainTestData trainTestData = MlContext.Data.TrainTestSplit(fullData, testFraction: 0.2);
+            var trainTestData = MlContext.Data.TrainTestSplit(fullData, testFraction: 0.2);
             var trainingDataView = trainTestData.TrainSet;
             var testingDataView = trainTestData.TestSet;
 
@@ -88,13 +97,13 @@ namespace FileClassifier.lib.ML.Clustering
             var trainingPipeline = pipeline.Append(trainer);
             var trainedModel = trainingPipeline.Fit(trainingDataView);
 
-            Console.WriteLine($"Model trained in {DateTime.Now.Subtract(startDate).TotalSeconds} seconds");
-
-            IDataView predictions = trainedModel.Transform(testingDataView);
+            Logger<TrainerCommandLineOptions>.Debug($"Model trained in {DateTime.Now.Subtract(startDate).TotalSeconds} seconds", options);
+            
+            var predictions = trainedModel.Transform(testingDataView);
 
             var metrics = MlContext.Clustering.Evaluate(predictions, scoreColumnName: "Score", featureColumnName: nameof(ClusterData.StringData));
 
-            Console.WriteLine($"Average Distance: {metrics.AverageDistance} | Davides Bouldin Index: {metrics.DaviesBouldinIndex}");
+            Logger<TrainerCommandLineOptions>.Debug($"Average Distance: {metrics.AverageDistance} | Davides Bouldin Index: {metrics.DaviesBouldinIndex}", options);
 
             using (var fileStream = new FileStream(MODEL_NAME, FileMode.Create, FileAccess.Write, FileShare.Write))
             {

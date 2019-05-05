@@ -2,6 +2,8 @@
 using System.CommandLine.Invocation;
 
 using FileClassifier.lib.Common;
+using FileClassifier.lib.Enums;
+using FileClassifier.lib.Options;
 
 namespace FileClassifier.Trainer
 {
@@ -52,7 +54,7 @@ namespace FileClassifier.Trainer
                 options = new TrainerCommandLineOptions
                 {
                     FolderOfData = folderPath,
-                    Verbose = verbose
+                    LogLevel = LogLevels.DEBUG
                 };
             });
 

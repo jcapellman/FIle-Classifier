@@ -1,11 +1,12 @@
 ﻿using System;
 
 using FileClassifier.lib;
-using FileClassifier.lib.Common;
+using FileClassifier.lib.Enums;
+using FileClassifier.lib.Options;
 
 namespace FileClassifier.app
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -17,7 +18,7 @@ namespace FileClassifier.app
                 return;
             }
 #else
-            var options = new Options { FileName = args[0], Verbose = true };
+            var options = new ClassifierCommandLineOptions { FileName = args[0], LogLevel = LogLevels.DEBUG };
 #endif
 
             try

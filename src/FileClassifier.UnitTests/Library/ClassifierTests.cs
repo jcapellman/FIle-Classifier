@@ -2,7 +2,7 @@
 using System.IO;
 
 using FileClassifier.lib;
-using FileClassifier.lib.Common;
+using FileClassifier.lib.Options;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,14 +22,14 @@ namespace FileClassifier.UnitTests.Library
         [ExpectedException(typeof(ArgumentNullException))]
         public void NullFileNameOptions()
         {
-            new Classifier(new Options()).Classify();
+            new Classifier(new ClassifierCommandLineOptions()).Classify();
         }
 
         [TestMethod]
         [ExpectedException(typeof(FileNotFoundException))]
         public void FileDoesntExistOptions()
         {
-            new Classifier(new Options
+            new Classifier(new ClassifierCommandLineOptions
             {
                 FileName = DateTime.Now.Ticks.ToString()
             });
@@ -41,7 +41,7 @@ namespace FileClassifier.UnitTests.Library
         [ExpectedException(typeof(FileNotFoundException))]
         public void InitialResponse_Null()
         {
-            var classifier = new Classifier(new Options {FileName = "test"});
+            var classifier = new Classifier(new ClassifierCommandLineOptions { FileName = "test"});
 
             classifier.InitializeResponse(null);
         }

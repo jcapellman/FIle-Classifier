@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
+using FileClassifier.lib.Base;
 using FileClassifier.lib.Common;
 using FileClassifier.lib.ML.Base.Objects;
+using FileClassifier.lib.Options;
 
 using Microsoft.ML;
 
@@ -28,9 +29,9 @@ namespace FileClassifier.lib.ML.Base
 
             var predictor = MlContext.Model.CreatePredictionEngine<T, TK>(model);
 
-            var data = FeatureExtraction(response);
+            var (Data, Output) = FeatureExtraction(response);
 
-            var result = predictor.Predict(data.Data);
+            var result = predictor.Predict(Data);
 
             return UpdateResponse(result, response);
         }
@@ -41,18 +42,22 @@ namespace FileClassifier.lib.ML.Base
 
             var files = Directory.GetFiles(options.FolderOfData);
 
-            Console.WriteLine($"{files.Length} Files found for training...");
+            Logger<TrainerCommandLineOptions>.Debug($"{files.Length} Files found for training...", options);
+
+            var stopWatch = DateTime.Now;
 
             var extractions = new ConcurrentQueue<string>();
 
             Parallel.ForEach(files, file =>
             {
-                var extraction = FeatureExtraction(new ClassifierResponseItem(File.ReadAllBytes(file), file));
+                var (data, output) = FeatureExtraction(new ClassifierResponseItem(File.ReadAllBytes(file), file));
 
-                extractions.Enqueue(extraction.Output);
+                extractions.Enqueue(output);
             });
 
             File.WriteAllText(fileName, string.Join(System.Environment.NewLine, extractions));
+
+            Logger<TrainerCommandLineOptions>.Debug($"Feature Extraction took {DateTime.Now.Subtract(stopWatch).TotalSeconds} seconds", options);
 
             return fileName;
         }
