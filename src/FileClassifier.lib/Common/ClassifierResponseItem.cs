@@ -85,6 +85,8 @@ namespace FileClassifier.lib.Common
             SHA1Hash = data.ToSHA1();
 
             FileGroup = GetGroupType(FileName);
+
+            Status = ClassifierStatus.INCOMPLETE;
         }
 
         public override string ToString()
