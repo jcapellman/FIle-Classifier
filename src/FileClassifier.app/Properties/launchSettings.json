@@ -2,7 +2,7 @@
   "profiles": {
     "FileClassifier.app": {
       "commandName": "Project",
-      "commandLineArgs": "FileClassifier.app.dll"
+      "commandLineArgs": "nuget.exe"
     }
   }
 }

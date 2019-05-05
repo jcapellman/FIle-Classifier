@@ -37,9 +37,11 @@ namespace FileClassifier.lib.ML.Base
 
         protected string FeatureExtractFolder(TrainerCommandLineOptions options)
         {
-            var fileName = Path.GetTempFileName();
+            var fileName = Path.Combine(AppContext.BaseDirectory, $"{DateTime.Now.Ticks}.txt");
 
             var files = Directory.GetFiles(options.FolderOfData);
+
+            Console.WriteLine($"{files.Length} Files found for training...");
 
             var extractions = new ConcurrentQueue<string>();
 

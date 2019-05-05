@@ -89,9 +89,9 @@ namespace FileClassifier.lib
             Log($"Clustering Result: {response.FileGroup} | Status: {response.Status}");
 
             // Classify if malicious or not based on the type
-            response = new ClassificationEngine().Predict(response);
+            //response = new ClassificationEngine().Predict(response);
 
-            Log($"Classification Confidence: {response.Confidence} | Malicious: {response.IsMalicious} | Status: {response.Status}");
+            //Log($"Classification Confidence: {response.Confidence} | Malicious: {response.IsMalicious} | Status: {response.Status}");
 
             return response;
         }

@@ -69,6 +69,8 @@ namespace FileClassifier.lib.Common
                     return FileGroupType.EXECUTABLE;
                 case ".mp4":
                     return FileGroupType.VIDEO;
+                case ".ps1":
+                    return FileGroupType.SCRIPT;
             }
 
             return FileGroupType.UNKNOWN;

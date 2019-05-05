@@ -22,9 +22,7 @@ namespace FileClassifier.Trainer
 
             try
             {
-                var result = new ClusteringEngine().TrainModel(options);
-
-                Console.WriteLine(result);
+                new ClusteringEngine().TrainModel(options);
             }
             catch (Exception ex)
             {

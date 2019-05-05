@@ -6,8 +6,6 @@ namespace FileClassifier.lib.ML.Clustering.Objects
     {
         public float Label;
 
-        public float Size;
-
-        public float Grams;
+        public string StringData;
     }
 }
