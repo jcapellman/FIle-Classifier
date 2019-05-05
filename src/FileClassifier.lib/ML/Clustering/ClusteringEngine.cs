@@ -18,6 +18,12 @@ namespace FileClassifier.lib.ML.Clustering
 {
     public class ClusteringEngine : BasePrediction<ClusterData, ClusterDataPrediction>
     {
+        private const int STRING_BYTE_LIMIT = 65536;
+
+        private const int BUFFER_SIZE = 2048;
+
+        private const int FILE_ENCODING = 1252;
+
         protected override string MODEL_NAME => "clustering.mdl";
 
         protected override ClassifierResponseItem UpdateResponse(ClusterDataPrediction prediction, ClassifierResponseItem response)
@@ -38,9 +44,11 @@ namespace FileClassifier.lib.ML.Clustering
 
             var stringLines = new StringBuilder();
 
-            using (var ms = new MemoryStream(response.Data, false))
+            var data = (response.Data.Length > STRING_BYTE_LIMIT ? response.Data.AsSpan(0, STRING_BYTE_LIMIT) : response.Data.AsSpan());
+
+            using (var ms = new MemoryStream(data.ToArray(), false))
             {
-                using (var streamReader = new StreamReader(ms, Encoding.GetEncoding(1252), false, 2048, false)) {
+                using (var streamReader = new StreamReader(ms, Encoding.GetEncoding(FILE_ENCODING), false, BUFFER_SIZE, false)) {
                     while (!streamReader.EndOfStream)
                     {
                         var line = streamReader.ReadLine();
