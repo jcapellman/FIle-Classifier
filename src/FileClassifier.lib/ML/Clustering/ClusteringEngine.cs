@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 using FileClassifier.lib.Common;
 using FileClassifier.lib.Enums;
@@ -7,6 +6,7 @@ using FileClassifier.lib.ML.Base;
 using FileClassifier.lib.ML.Clustering.Objects;
 
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
 namespace FileClassifier.lib.ML.Clustering
 {
@@ -26,25 +26,35 @@ namespace FileClassifier.lib.ML.Clustering
             var clusterData = new ClusterData
             {
                 Size = response.SizeInBytes,
-                Grams = float.MinValue
+                Grams = int.MinValue
             };
             
-            return (clusterData, $"{clusterData.Size},{clusterData.Grams},{response.FileGroup}");
+            return (clusterData, $"{(int)response.FileGroup},{clusterData.Size},{clusterData.Grams}");
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)
         {
             var fileName = FeatureExtractFolder(options);
 
-            var dataView = MlContext.Data.LoadFromTextFile<ClusterData>(fileName, hasHeader: false, separatorChar: ',');
+            var dataView = MlContext.Data.LoadFromTextFile(path: fileName,
+                new[]
+                {
+                    new TextLoader.Column("Label", DataKind.Single, 0),
+                    new TextLoader.Column(nameof(ClusterData.Size), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(ClusterData.Grams), DataKind.Single, 2)
+                },
+                hasHeader: true,
+                separatorChar: ',');
 
             var featuresColumnName = "Features";
 
             var pipeline = MlContext.Transforms
-                .Concatenate(featuresColumnName, "Size", "Grams")
-                .Append(MlContext.Clustering.Trainers.KMeans(featuresColumnName, numberOfClusters: Enum.GetNames(typeof(FileGroupType)).Length));
+                .Concatenate(featuresColumnName, nameof(ClusterData.Size), nameof(ClusterData.Grams));
 
-            var model = pipeline.Fit(dataView);
+            var trainer = MlContext.Clustering.Trainers.KMeans(featureColumnName: featuresColumnName, numberOfClusters: 3);
+
+            var trainingPipeline = pipeline.Append(trainer);
+            var model = trainingPipeline.Fit(dataView);
 
             using (var fileStream = new FileStream(MODEL_NAME, FileMode.CreateNew, FileAccess.Write, FileShare.Write))
             {
