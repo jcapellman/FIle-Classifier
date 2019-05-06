@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="clustering.mdl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Models\clustering.mdl" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.ML" Version="1.0.0" />
     <PackageReference Include="Microsoft.ML.FastTree" Version="1.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0-preview4.19212.13" />

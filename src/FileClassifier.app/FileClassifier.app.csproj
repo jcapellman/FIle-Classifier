@@ -9,6 +9,10 @@
     <OutputPath>../Debug</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>../Release</OutputPath>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.ML" Version="1.0.0" />
     <PackageReference Include="Microsoft.ML.FastTree" Version="1.0.0" />

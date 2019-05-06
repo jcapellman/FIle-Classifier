@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FileClassifier.Trainer": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Samples"
+    }
+  }
+}
