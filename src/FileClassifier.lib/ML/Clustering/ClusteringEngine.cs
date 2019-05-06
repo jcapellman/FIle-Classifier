@@ -30,7 +30,7 @@ namespace FileClassifier.lib.ML.Clustering
         {
             response.FileGroup = (FileGroupType) prediction.PredictedClusterId;
 
-            var distances = prediction.Distances.Select((t, x) => $"{x}:{t}").ToList();
+            var distances = prediction.Distances.Select((t, x) => $"{(FileGroupType)x+1}:{t}").ToList();
 
             Logger<ClassifierCommandLineOptions>.Debug($"Distances: {string.Join("|", distances)}", options);
 
