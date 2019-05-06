@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.ML" Version="1.0.0" />
     <PackageReference Include="Microsoft.ML.FastTree" Version="1.0.0" />
     <PackageReference Include="SSDEEP.NET" Version="1.0.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0-preview4.19212.13" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0-preview5.19224.8" />
   </ItemGroup>
 
 </Project>

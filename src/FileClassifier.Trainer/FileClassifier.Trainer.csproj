@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="SSDEEP.NET" Version="1.0.0" />
     <PackageReference Include="System.CommandLine.Experimental" Version="0.2.0-alpha.19174.3" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0-preview4.19212.13" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0-preview5.19224.8" />
   </ItemGroup>
 
   <ItemGroup>
