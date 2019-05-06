@@ -26,9 +26,15 @@ namespace FileClassifier.lib.ML.Clustering
 
         protected override string MODEL_NAME => "clustering.mdl";
 
-        protected override ClassifierResponseItem UpdateResponse(ClusterDataPrediction prediction, ClassifierResponseItem response)
+        protected override ClassifierResponseItem UpdateResponse(ClusterDataPrediction prediction, ClassifierResponseItem response, ClassifierCommandLineOptions options)
         {
             response.FileGroup = (FileGroupType) prediction.PredictedClusterId;
+
+            var distances = prediction.Distances.Select((t, x) => $"{x}:{t}").ToList();
+
+            Logger<ClassifierCommandLineOptions>.Debug($"Distances: {string.Join("|", distances)}", options);
+
+            response.UpdateStatus(ClassifierStatus.SUCCESS);
 
             return response;
         }

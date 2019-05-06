@@ -91,6 +91,11 @@ namespace FileClassifier.lib.Common
             Status = ClassifierStatus.INCOMPLETE;
         }
 
+        public void UpdateStatus(ClassifierStatus status)
+        {
+            Status = status;
+        }
+
         public override string ToString()
         {
             var output = $"SHA1: {SHA1Hash} | Size (bytes): {SizeInBytes} | File Group: {FileGroup} | Confidence: {Confidence} | Malicious: {IsMalicious} | Status: {Status}";

@@ -73,7 +73,7 @@ namespace FileClassifier.lib
             Logger<ClassifierCommandLineOptions>.Debug($"Classifying {_options.FileName}...", _options);
         
             // Classify which file type
-            response = new ClusteringEngine().Predict(response);
+            response = new ClusteringEngine().Predict(response, _options);
 
             Logger<ClassifierCommandLineOptions>.Debug($"Clustering Result: {response.FileGroup} | Status: {response.Status}", _options);
 

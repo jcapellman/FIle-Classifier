@@ -9,7 +9,7 @@ namespace FileClassifier.lib.ML.Classification
     {
         protected override string MODEL_NAME => "classification.mdl";
 
-        protected override ClassifierResponseItem UpdateResponse(ClassificationDataPrediction prediction, ClassifierResponseItem response)
+        protected override ClassifierResponseItem UpdateResponse(ClassificationDataPrediction prediction, ClassifierResponseItem response, ClassifierCommandLineOptions options)
         {
             response.Confidence = prediction.Score;
             response.IsMalicious = prediction.Prediction;

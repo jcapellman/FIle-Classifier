@@ -19,7 +19,7 @@ namespace FileClassifier.lib.ML.Base
 
         protected static readonly MLContext MlContext = new MLContext(Common.Constants.ML_SEED);
 
-        public ClassifierResponseItem Predict(ClassifierResponseItem response)
+        public ClassifierResponseItem Predict(ClassifierResponseItem response, ClassifierCommandLineOptions options)
         {
             if (response == null)
             {
@@ -38,7 +38,7 @@ namespace FileClassifier.lib.ML.Base
 
             var result = predictor.Predict(Data);
 
-            return UpdateResponse(result, response);
+            return UpdateResponse(result, response, options);
         }
 
         protected string FeatureExtractFolder(TrainerCommandLineOptions options)
@@ -80,7 +80,7 @@ namespace FileClassifier.lib.ML.Base
             Logger<TrainerCommandLineOptions>.Debug($"Model saved to {OutputModelPath}", options);
         }
 
-        protected abstract ClassifierResponseItem UpdateResponse(TK prediction, ClassifierResponseItem response);
+        protected abstract ClassifierResponseItem UpdateResponse(TK prediction, ClassifierResponseItem response, ClassifierCommandLineOptions options);
 
         public abstract (T Data, string Output) FeatureExtraction(ClassifierResponseItem response);
 
