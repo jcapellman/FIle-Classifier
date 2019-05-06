@@ -13,6 +13,7 @@ using FileClassifier.lib.Options;
 
 using Microsoft.ML;
 using Microsoft.ML.Data;
+using SSDEEP.NET;
 
 namespace FileClassifier.lib.ML.Clustering
 {
@@ -49,7 +50,7 @@ namespace FileClassifier.lib.ML.Clustering
             };
 
             var stringLines = new StringBuilder();
-
+            
             var data = (response.Data.Length > STRING_BYTE_LIMIT ? response.Data.AsSpan(0, STRING_BYTE_LIMIT) : response.Data.AsSpan());
 
             using (var ms = new MemoryStream(data.ToArray(), false))
@@ -70,7 +71,9 @@ namespace FileClassifier.lib.ML.Clustering
                 }                
             }
 
-            return (clusterData, $"{(int)response.FileGroup},{string.Join(string.Empty, stringLines)}");
+            var ssdeep = Hasher.HashBuffer(response.Data, response.Data.Length, FuzzyHashMode.EliminateSequences);
+
+            return (clusterData, $"{(int)response.FileGroup},{ssdeep},{string.Join(string.Empty, stringLines)}");
         }
 
         public ClusteringEngine()
@@ -90,7 +93,8 @@ namespace FileClassifier.lib.ML.Clustering
                 new[]
                 {
                     new TextLoader.Column("Label", DataKind.Single, 0),
-                    new TextLoader.Column(nameof(ClusterData.StringData), DataKind.String, 1)
+                    new TextLoader.Column(nameof(ClusterData.SSDeep), DataKind.String, 1),
+                    new TextLoader.Column(nameof(ClusterData.StringData), DataKind.String, 2)
                 },
                 hasHeader: false,
                 separatorChar: ',');
@@ -99,14 +103,23 @@ namespace FileClassifier.lib.ML.Clustering
             var trainingDataView = trainTestData.TrainSet;
             var testingDataView = trainTestData.TestSet;
 
-            var pipeline = MlContext.Transforms.Text.NormalizeText(nameof(ClusterData.StringData))
+            var featuresColumnName = "Features";
+
+            var pipeline = MlContext.Transforms.Text.NormalizeText(nameof(ClusterData.SSDeep))
+                .Append(MlContext.Transforms.Text.TokenizeIntoWords(nameof(ClusterData.SSDeep)))
+                .Append(MlContext.Transforms.Text.RemoveDefaultStopWords(nameof(ClusterData.SSDeep)))
+                .Append(MlContext.Transforms.Conversion.MapValueToKey(nameof(ClusterData.SSDeep)))
+                .Append(MlContext.Transforms.Text.ProduceNgrams(nameof(ClusterData.SSDeep)))
+                .Append(MlContext.Transforms.NormalizeLpNorm(nameof(ClusterData.SSDeep)))
+                .Append(MlContext.Transforms.Text.NormalizeText(nameof(ClusterData.StringData))
                 .Append(MlContext.Transforms.Text.TokenizeIntoWords(nameof(ClusterData.StringData)))
                 .Append(MlContext.Transforms.Text.RemoveDefaultStopWords(nameof(ClusterData.StringData)))
                 .Append(MlContext.Transforms.Conversion.MapValueToKey(nameof(ClusterData.StringData)))
                 .Append(MlContext.Transforms.Text.ProduceNgrams(nameof(ClusterData.StringData)))
-                .Append(MlContext.Transforms.NormalizeLpNorm(nameof(ClusterData.StringData)));
+                .Append(MlContext.Transforms.NormalizeLpNorm(nameof(ClusterData.StringData)))
+                .Append(MlContext.Transforms.Concatenate(featuresColumnName, nameof(ClusterData.SSDeep), nameof(ClusterData.StringData))));
 
-            var trainer = MlContext.Clustering.Trainers.KMeans(featureColumnName: nameof(ClusterData.StringData), numberOfClusters: 6);
+            var trainer = MlContext.Clustering.Trainers.KMeans(featureColumnName: featuresColumnName, numberOfClusters: 5);
 
             var trainingPipeline = pipeline.Append(trainer);
             var trainedModel = trainingPipeline.Fit(trainingDataView);

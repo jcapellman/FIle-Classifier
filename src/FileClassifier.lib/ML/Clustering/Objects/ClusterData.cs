@@ -6,6 +6,8 @@ namespace FileClassifier.lib.ML.Clustering.Objects
     {
         public float Label;
 
+        public string SSDeep;
+
         public string StringData;
     }
 }
