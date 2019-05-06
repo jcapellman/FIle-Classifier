@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
 using FileClassifier.lib.Base;
 using FileClassifier.lib.Common;
+using FileClassifier.lib.Enums;
 using FileClassifier.lib.ML.Base.Objects;
 using FileClassifier.lib.Options;
 
@@ -53,14 +55,27 @@ namespace FileClassifier.lib.ML.Base
 
             var extractions = new ConcurrentQueue<string>();
 
+            var classifications = new ConcurrentQueue<FileGroupType>();
+
             Parallel.ForEach(files, file =>
             {
-                var (data, output) = FeatureExtraction(new ClassifierResponseItem(File.ReadAllBytes(file), file));
+                var response = new ClassifierResponseItem(File.ReadAllBytes(file), file);
+
+                var (data, output) = FeatureExtraction(response);
+
+                classifications.Enqueue(response.FileGroup);
 
                 extractions.Enqueue(output);
             });
 
             File.WriteAllText(fileName, string.Join(System.Environment.NewLine, extractions));
+
+            var featureBreakdown = (from classification in classifications.GroupBy(a => a).Select(a => a.Key)
+                let count = classifications.Count(a => a == classification)
+                let percentage = Math.Round((double) count / files.Length * 100.0, 0)
+                select $"{classification}: {(double) count} ({percentage}%)").ToList();
+
+            Logger<TrainerCommandLineOptions>.Debug(string.Join("|", featureBreakdown), options);
 
             Logger<TrainerCommandLineOptions>.Debug($"Feature Extraction took {DateTime.Now.Subtract(stopWatch).TotalSeconds} seconds", options);
 
