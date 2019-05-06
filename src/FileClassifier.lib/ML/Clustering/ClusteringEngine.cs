@@ -113,10 +113,7 @@ namespace FileClassifier.lib.ML.Clustering
 
             Logger<TrainerCommandLineOptions>.Debug($"Average Distance: {metrics.AverageDistance} | Davides Bouldin Index: {metrics.DaviesBouldinIndex}", options);
 
-            using (var fileStream = new FileStream(MODEL_NAME, FileMode.Create, FileAccess.Write, FileShare.Write))
-            {
-                MlContext.Model.Save(trainedModel, trainingDataView.Schema, fileStream);
-            }
+            SaveModel(trainedModel, trainingDataView.Schema, options);
 
             return true;
         }

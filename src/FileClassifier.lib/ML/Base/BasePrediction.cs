@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using FileClassifier.lib.Base;
@@ -25,7 +26,11 @@ namespace FileClassifier.lib.ML.Base
                 throw new ArgumentNullException(nameof(response));
             }
 
-            var model = MlContext.Model.Load(MODEL_NAME, out var schema);
+            var assembly = typeof(BasePredictionData).GetTypeInfo().Assembly;
+
+            var resource = assembly.GetManifestResourceStream($"FileClassifier.lib.Models.{MODEL_NAME}");
+
+            var model = MlContext.Model.Load(resource, out var schema);
 
             var predictor = MlContext.Model.CreatePredictionEngine<T, TK>(model);
 
@@ -60,6 +65,19 @@ namespace FileClassifier.lib.ML.Base
             Logger<TrainerCommandLineOptions>.Debug($"Feature Extraction took {DateTime.Now.Subtract(stopWatch).TotalSeconds} seconds", options);
 
             return fileName;
+        }
+
+        protected string OutputModelPath =>
+            Path.Combine(AppContext.BaseDirectory, @"..\..\FileClassifier.lib\Models", MODEL_NAME);
+
+        protected void SaveModel(ITransformer trainedModel, DataViewSchema schema, TrainerCommandLineOptions options)
+        {
+            using (var fileStream = new FileStream(OutputModelPath, FileMode.Create, FileAccess.Write, FileShare.Write))
+            {
+                MlContext.Model.Save(trainedModel, schema, fileStream);
+            }
+
+            Logger<TrainerCommandLineOptions>.Debug($"Model saved to {OutputModelPath}", options);
         }
 
         protected abstract ClassifierResponseItem UpdateResponse(TK prediction, ClassifierResponseItem response);
