@@ -36,13 +36,13 @@ namespace FileClassifier.lib.ML.Base
 
             var predictor = MlContext.Model.CreatePredictionEngine<T, TK>(model);
 
-            var (Data, Output) = FeatureExtraction(response);
+            var (data, output) = FeatureExtraction(response);
 
-            var result = predictor.Predict(Data);
+            var result = predictor.Predict(data);
 
             return UpdateResponse(result, response, options);
         }
-
+        
         protected string FeatureExtractFolder(TrainerCommandLineOptions options)
         {
             var fileName = Path.Combine(AppContext.BaseDirectory, $"{DateTime.Now.Ticks}.txt");
@@ -59,7 +59,7 @@ namespace FileClassifier.lib.ML.Base
 
             Parallel.ForEach(files, file =>
             {
-                var response = new ClassifierResponseItem(File.ReadAllBytes(file), file);
+                var response = new ClassifierResponseItem(File.ReadAllBytes(file), file, true);
 
                 var (data, output) = FeatureExtraction(response);
 

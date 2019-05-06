@@ -57,7 +57,7 @@ namespace FileClassifier.lib
                 return new ClassifierResponseItem(ex);
             }
 
-            return new ClassifierResponseItem(data, fileName);
+            return new ClassifierResponseItem(data, fileName, false);
         }
 
         public ClassifierResponseItem Classify()

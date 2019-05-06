@@ -106,7 +106,7 @@ namespace FileClassifier.lib.ML.Clustering
                 .Append(MlContext.Transforms.Text.ProduceNgrams(nameof(ClusterData.StringData)))
                 .Append(MlContext.Transforms.NormalizeLpNorm(nameof(ClusterData.StringData)));
 
-            var trainer = MlContext.Clustering.Trainers.KMeans(featureColumnName: nameof(ClusterData.StringData), numberOfClusters: 3);
+            var trainer = MlContext.Clustering.Trainers.KMeans(featureColumnName: nameof(ClusterData.StringData), numberOfClusters: 6);
 
             var trainingPipeline = pipeline.Append(trainer);
             var trainedModel = trainingPipeline.Fit(trainingDataView);

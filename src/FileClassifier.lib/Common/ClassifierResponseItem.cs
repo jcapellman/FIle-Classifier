@@ -43,9 +43,9 @@ namespace FileClassifier.lib.Common
             Status = ClassifierStatus.ERROR;
         }
 
-        private static FileGroupType GetGroupType(string fileName)
+        private static FileGroupType GetGroupType(string fileName, bool useFileName = false)
         {
-            if (string.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(fileName) || !useFileName)
             {
                 return FileGroupType.UNKNOWN;
             }
@@ -62,9 +62,16 @@ namespace FileClassifier.lib.Common
 
             switch (extension)
             {
+                case ".doc":
+                case ".xlsx":
+                case ".pptx":
+                case ".docx":
+                case ".pdf":
+                    return FileGroupType.DOCUMENT;
                 case ".jpg":
                 case ".png":
                     return FileGroupType.IMAGE;
+                case ".dll":
                 case ".exe":
                     return FileGroupType.EXECUTABLE;
                 case ".mp4":
@@ -76,7 +83,7 @@ namespace FileClassifier.lib.Common
             return FileGroupType.UNKNOWN;
         }
 
-        public ClassifierResponseItem(byte[] data, string fileName)
+        public ClassifierResponseItem(byte[] data, string fileName, bool useFileName = false)
         {
             Data = data;
 
@@ -86,7 +93,7 @@ namespace FileClassifier.lib.Common
 
             SHA1Hash = data.ToSHA1();
 
-            FileGroup = GetGroupType(FileName);
+            FileGroup = GetGroupType(FileName, useFileName);
 
             Status = ClassifierStatus.INCOMPLETE;
         }
