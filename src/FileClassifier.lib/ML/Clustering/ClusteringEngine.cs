@@ -19,7 +19,9 @@ namespace FileClassifier.lib.ML.Clustering
 {
     public class ClusteringEngine : BasePrediction<ClusterData, ClusterDataPrediction>
     {
-        private const int STRING_BYTE_LIMIT = 65536;
+        private const int STRING_BYTE_MINIMUM = 65526 * 2;
+
+        private const double STRING_BYTE_PERCENTAGE = .50;
 
         private const int BUFFER_SIZE = 2048;
 
@@ -51,7 +53,7 @@ namespace FileClassifier.lib.ML.Clustering
 
             var stringLines = new StringBuilder();
             
-            var data = (response.Data.Length > STRING_BYTE_LIMIT ? response.Data.AsSpan(0, STRING_BYTE_LIMIT) : response.Data.AsSpan());
+            var data = (response.Data.Length > STRING_BYTE_MINIMUM ? response.Data.AsSpan(0, (int)(response.Data.Length * STRING_BYTE_PERCENTAGE)) : response.Data.AsSpan());
 
             using (var ms = new MemoryStream(data.ToArray(), false))
             {
