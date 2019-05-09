@@ -13,15 +13,12 @@ using FileClassifier.lib.Options;
 
 using Microsoft.ML;
 using Microsoft.ML.Data;
-using SSDEEP.NET;
 
 namespace FileClassifier.lib.ML.Clustering
 {
     public class ClusteringEngine : BasePrediction<ClusterData, ClusterDataPrediction>
     {
         private const int STRING_BYTE_MINIMUM = 65526 * 2;
-
-        private const double STRING_BYTE_PERCENTAGE = .50;
 
         private const int BUFFER_SIZE = 2048;
 
