@@ -44,20 +44,21 @@ namespace FileClassifier.lib.ML.Clustering
 
         private static Regex _stringRex;
 
-        public override (ClusterData Data, string Output) FeatureExtraction(ClassifierResponseItem response)
+        private string GetStrings(byte[] data, int start, int length)
         {
-            var clusterData = new ClusterData
-            {
-                StringData = string.Empty
-            };
-
             var stringLines = new StringBuilder();
-            
-            var data = (response.Data.Length > STRING_BYTE_MINIMUM ? response.Data.AsSpan(0, (int)(response.Data.Length * STRING_BYTE_PERCENTAGE)) : response.Data.AsSpan());
 
-            using (var ms = new MemoryStream(data.ToArray(), false))
+            if (data == null || data.Length == 0)
             {
-                using (var streamReader = new StreamReader(ms, Encoding.GetEncoding(FILE_ENCODING), false, BUFFER_SIZE, false)) {
+                return stringLines.ToString();
+            }
+
+            var dataToParse = data.Length < data.Length - length - start ? data : data.Skip(start).Take(length).ToArray();
+
+            using (var ms = new MemoryStream(dataToParse, false))
+            {
+                using (var streamReader = new StreamReader(ms, Encoding.GetEncoding(FILE_ENCODING), false, BUFFER_SIZE, false))
+                {
                     while (!streamReader.EndOfStream)
                     {
                         var line = streamReader.ReadLine();
@@ -70,12 +71,24 @@ namespace FileClassifier.lib.ML.Clustering
                         stringLines.Append(string.Join(string.Empty,
                             _stringRex.Matches(line).Where(a => !string.IsNullOrEmpty(a.Value) && !string.IsNullOrWhiteSpace(a.Value)).ToList()));
                     }
-                }                
+                }
             }
 
-            var ssdeep = Hasher.HashBuffer(response.Data, response.Data.Length, FuzzyHashMode.EliminateSequences);
+            return string.Join(string.Empty, stringLines);
+        }
 
-            return (clusterData, $"{(int)response.FileGroup},{ssdeep},{string.Join(string.Empty, stringLines)}");
+        public override (ClusterData Data, string Output) FeatureExtraction(ClassifierResponseItem response)
+        {
+            var clusterData = new ClusterData
+            {
+                StartStringData = string.Empty,
+                EndStringData = string.Empty
+            };
+
+            clusterData.StartStringData = GetStrings(response.Data, 0, STRING_BYTE_MINIMUM);
+            clusterData.EndStringData = GetStrings(response.Data, response.Data.Length - STRING_BYTE_MINIMUM, STRING_BYTE_MINIMUM);
+
+            return (clusterData, $"{(int)response.FileGroup},{clusterData.StartStringData},{clusterData.EndStringData}");
         }
 
         public ClusteringEngine()
@@ -95,8 +108,8 @@ namespace FileClassifier.lib.ML.Clustering
                 new[]
                 {
                     new TextLoader.Column("Label", DataKind.Single, 0),
-                    new TextLoader.Column(nameof(ClusterData.SSDeep), DataKind.String, 1),
-                    new TextLoader.Column(nameof(ClusterData.StringData), DataKind.String, 2)
+                    new TextLoader.Column(nameof(ClusterData.StartStringData), DataKind.String, 1),
+                    new TextLoader.Column(nameof(ClusterData.EndStringData), DataKind.String, 2)
                 },
                 hasHeader: false,
                 separatorChar: ',');
@@ -107,19 +120,19 @@ namespace FileClassifier.lib.ML.Clustering
 
             var featuresColumnName = "Features";
 
-            var pipeline = MlContext.Transforms.Text.NormalizeText(nameof(ClusterData.SSDeep))
-                .Append(MlContext.Transforms.Text.TokenizeIntoWords(nameof(ClusterData.SSDeep)))
-                .Append(MlContext.Transforms.Text.RemoveDefaultStopWords(nameof(ClusterData.SSDeep)))
-                .Append(MlContext.Transforms.Conversion.MapValueToKey(nameof(ClusterData.SSDeep)))
-                .Append(MlContext.Transforms.Text.ProduceNgrams(nameof(ClusterData.SSDeep)))
-                .Append(MlContext.Transforms.NormalizeLpNorm(nameof(ClusterData.SSDeep)))
-                .Append(MlContext.Transforms.Text.NormalizeText(nameof(ClusterData.StringData))
-                .Append(MlContext.Transforms.Text.TokenizeIntoWords(nameof(ClusterData.StringData)))
-                .Append(MlContext.Transforms.Text.RemoveDefaultStopWords(nameof(ClusterData.StringData)))
-                .Append(MlContext.Transforms.Conversion.MapValueToKey(nameof(ClusterData.StringData)))
-                .Append(MlContext.Transforms.Text.ProduceNgrams(nameof(ClusterData.StringData)))
-                .Append(MlContext.Transforms.NormalizeLpNorm(nameof(ClusterData.StringData)))
-                .Append(MlContext.Transforms.Concatenate(featuresColumnName, nameof(ClusterData.SSDeep), nameof(ClusterData.StringData))));
+            var pipeline = MlContext.Transforms.Text.NormalizeText(nameof(ClusterData.StartStringData))
+                .Append(MlContext.Transforms.Text.TokenizeIntoWords(nameof(ClusterData.StartStringData)))
+                .Append(MlContext.Transforms.Text.RemoveDefaultStopWords(nameof(ClusterData.StartStringData)))
+                .Append(MlContext.Transforms.Conversion.MapValueToKey(nameof(ClusterData.StartStringData)))
+                .Append(MlContext.Transforms.Text.ProduceNgrams(nameof(ClusterData.StartStringData)))
+                .Append(MlContext.Transforms.NormalizeLpNorm(nameof(ClusterData.StartStringData)))
+                .Append(MlContext.Transforms.Text.NormalizeText(nameof(ClusterData.EndStringData))
+                .Append(MlContext.Transforms.Text.TokenizeIntoWords(nameof(ClusterData.EndStringData)))
+                .Append(MlContext.Transforms.Text.RemoveDefaultStopWords(nameof(ClusterData.EndStringData)))
+                .Append(MlContext.Transforms.Conversion.MapValueToKey(nameof(ClusterData.EndStringData)))
+                .Append(MlContext.Transforms.Text.ProduceNgrams(nameof(ClusterData.EndStringData)))
+                .Append(MlContext.Transforms.NormalizeLpNorm(nameof(ClusterData.EndStringData)))
+                .Append(MlContext.Transforms.Concatenate(featuresColumnName, nameof(ClusterData.StartStringData), nameof(ClusterData.EndStringData))));
 
             var trainer = MlContext.Clustering.Trainers.KMeans(featureColumnName: featuresColumnName, numberOfClusters: 5);
 
@@ -130,7 +143,7 @@ namespace FileClassifier.lib.ML.Clustering
             
             var predictions = trainedModel.Transform(testingDataView);
 
-            var metrics = MlContext.Clustering.Evaluate(predictions, scoreColumnName: "Score", featureColumnName: nameof(ClusterData.StringData));
+            var metrics = MlContext.Clustering.Evaluate(predictions, scoreColumnName: "Score", featureColumnName: featuresColumnName);
 
             Logger<TrainerCommandLineOptions>.Debug($"Average Distance: {metrics.AverageDistance} | Davides Bouldin Index: {metrics.DaviesBouldinIndex}", options);
 
