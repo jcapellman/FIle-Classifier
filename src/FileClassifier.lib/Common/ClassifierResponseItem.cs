@@ -95,6 +95,8 @@ namespace FileClassifier.lib.Common
 
             FileGroup = GetGroupType(FileName, useFileName);
 
+            IsMalicious = fileName.Contains("malicious", StringComparison.InvariantCultureIgnoreCase);
+
             Status = ClassifierStatus.INCOMPLETE;
         }
 

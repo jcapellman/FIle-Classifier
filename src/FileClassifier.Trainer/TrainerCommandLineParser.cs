@@ -1,7 +1,6 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
 
-using FileClassifier.lib.Common;
 using FileClassifier.lib.Enums;
 using FileClassifier.lib.Options;
 
@@ -23,6 +22,11 @@ namespace FileClassifier.Trainer
                 "Folder containing data to be parsed to build the model",
                 new Argument<string>());
 
+            Option oClustering = new Option(
+                "--clustering",
+                "Clustering engine",
+                new Argument<bool>());
+
             var rootCommand = new RootCommand
             {
                 Description = "File Trainer builds a model"
@@ -30,6 +34,8 @@ namespace FileClassifier.Trainer
 
             rootCommand.AddOption(oFolder);
             rootCommand.AddOption(oVerbose);
+            rootCommand.AddOption(oClustering);
+
             rootCommand.TreatUnmatchedTokensAsErrors = true;
 
             rootCommand.Argument.AddValidator(symbolResult =>
@@ -44,7 +50,7 @@ namespace FileClassifier.Trainer
                 }
             });
 
-            rootCommand.Handler = CommandHandler.Create<string, bool>((folderPath, verbose) =>
+            rootCommand.Handler = CommandHandler.Create<string, bool, bool>((folderPath, verbose, clustering) =>
             {
                 if (string.IsNullOrEmpty(folderPath))
                 {

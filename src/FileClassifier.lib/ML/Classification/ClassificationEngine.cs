@@ -30,7 +30,7 @@ namespace FileClassifier.lib.ML.Classification
                 Malicious = false
             };
 
-            return (classificationData, $"{classificationData.NGramText},{classificationData.Malicious}");
+            return (classificationData, $"{classificationData.NGramText},{response.IsMalicious}");
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)
