@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 
 using FileClassifier.lib.Base;
 using FileClassifier.lib.Common;
+using FileClassifier.lib.ML.Classification;
 using FileClassifier.lib.ML.Clustering;
 using FileClassifier.lib.Options;
 
@@ -78,9 +79,9 @@ namespace FileClassifier.lib
             Logger<ClassifierCommandLineOptions>.Debug($"Clustering Result: {response.FileGroup} | Status: {response.Status}", _options);
 
             // Classify if malicious or not based on the type
-            //response = new ClassificationEngine().Predict(response);
+            response = new ClassificationEngine().Predict(response, _options);
 
-            //Log($"Classification Confidence: {response.Confidence} | Malicious: {response.IsMalicious} | Status: {response.Status}");
+            Logger<ClassifierCommandLineOptions>.Debug($"Classification Confidence: {response.Confidence} | Malicious: {response.IsMalicious} | Status: {response.Status}", _options);
 
             return response;
         }
