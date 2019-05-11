@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using FileClassifier.lib.Base;
@@ -19,7 +21,20 @@ namespace FileClassifier.lib.ML.Base
     {
         protected abstract string MODEL_NAME { get; }
 
+        private const int FILE_ENCODING = 1252;
+
+        private const int BUFFER_SIZE = 2048;
+
         protected static readonly MLContext MlContext = new MLContext(Common.Constants.ML_SEED);
+
+        private static Regex _stringRex;
+
+        protected BasePrediction()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            _stringRex = new Regex(@"[ -~\t]{8,}", RegexOptions.Compiled);
+        }
 
         public ClassifierResponseItem Predict(ClassifierResponseItem response, ClassifierCommandLineOptions options)
         {
@@ -35,14 +50,46 @@ namespace FileClassifier.lib.ML.Base
             var model = MlContext.Model.Load(resource, out var schema);
 
             var predictor = MlContext.Model.CreatePredictionEngine<T, TK>(model);
-
-            var (data, output) = FeatureExtraction(response);
+            var (data, _) = FeatureExtraction(response);
 
             var result = predictor.Predict(data);
 
             return UpdateResponse(result, response, options);
         }
-        
+
+        protected string GetStrings(byte[] data, int start, int length)
+        {
+            var stringLines = new StringBuilder();
+
+            if (data == null || data.Length == 0)
+            {
+                return stringLines.ToString();
+            }
+
+            var dataToParse = data.Length < data.Length - length - start ? data : data.Skip(start).Take(length).ToArray();
+
+            using (var ms = new MemoryStream(dataToParse, false))
+            {
+                using (var streamReader = new StreamReader(ms, Encoding.GetEncoding(FILE_ENCODING), false, BUFFER_SIZE, false))
+                {
+                    while (!streamReader.EndOfStream)
+                    {
+                        var line = streamReader.ReadLine();
+
+                        if (string.IsNullOrEmpty(line))
+                        {
+                            continue;
+                        }
+
+                        stringLines.Append(string.Join(string.Empty,
+                            _stringRex.Matches(line).Where(a => !string.IsNullOrEmpty(a.Value) && !string.IsNullOrWhiteSpace(a.Value)).ToList()));
+                    }
+                }
+            }
+
+            return string.Join(string.Empty, stringLines);
+        }
+
         protected string FeatureExtractFolder(TrainerCommandLineOptions options)
         {
             var fileName = Path.Combine(AppContext.BaseDirectory, $"{DateTime.Now.Ticks}.txt");
