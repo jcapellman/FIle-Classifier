@@ -11,5 +11,8 @@ namespace FileClassifier.lib.ML.Classification.Objects
 
         [LoadColumn(1), ColumnName("Label")]
         public bool Malicious;
+
+        [LoadColumn(2)]
+        public int FileGroupType;
     }
 }
