@@ -45,8 +45,9 @@ namespace FileClassifier.lib.ML.Classification
 
             var featuresColumnName = "Features";
 
-            var estimator = MlContext.Transforms.Text.FeaturizeText(outputColumnName: featuresColumnName,
+            var estimator = MlContext.Transforms.Text.FeaturizeText(outputColumnName: "NGramTextK",
                 inputColumnName: nameof(ClassificationData.NGramText))
+                .Append(MlContext.Transforms.Concatenate(featuresColumnName, "MGramTextK", nameof(ClassificationData.Malicious), nameof(ClassificationData.FileGroupType)))
                 .Append(MlContext.BinaryClassification.Trainers.SdcaLogisticRegression(labelColumnName: "Label", featureColumnName: featuresColumnName));
 
             var model = estimator.Fit(splitDataView.TrainSet);
