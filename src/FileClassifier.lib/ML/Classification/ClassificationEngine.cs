@@ -7,6 +7,7 @@ using FileClassifier.lib.ML.Classification.Objects;
 using FileClassifier.lib.Options;
 
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
 namespace FileClassifier.lib.ML.Classification
 {
@@ -27,10 +28,11 @@ namespace FileClassifier.lib.ML.Classification
             var classificationData = new ClassificationData
             {
                 NGramText = GetStrings(response.Data, 0, 128),
-                Malicious = false
+                Label = false,
+                FileGroupType = (int)response.FileGroup
             };
 
-            return (classificationData, $"\"{classificationData.NGramText}\"\t{response.IsMalicious}\t{(int)response.FileGroup}");
+            return (classificationData, $"{response.IsMalicious},{(int)response.FileGroup},\"{classificationData.NGramText}\"");
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)
@@ -39,18 +41,33 @@ namespace FileClassifier.lib.ML.Classification
 
             var startDate = DateTime.Now;
 
-            var dataView = MlContext.Data.LoadFromTextFile<ClassificationData>(fileName, hasHeader: false);
+            var dataView = MlContext.Data.LoadFromTextFile(path: fileName,
+                new[]
+                {
+                    new TextLoader.Column("Label", DataKind.Boolean, 0),
+                    new TextLoader.Column(nameof(ClassificationData.FileGroupType), DataKind.Single, 1),
+                    new TextLoader.Column(nameof(ClassificationData.NGramText), DataKind.String, 2)                    
+                },
+                hasHeader: false,
+                separatorChar: ',');
 
             var splitDataView = MlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
 
             var featuresColumnName = "Features";
 
-            var estimator = MlContext.Transforms.Text.FeaturizeText(nameof(ClassificationData.NGramText))
+            var dataProcessPipeline = MlContext.Transforms.Text.FeaturizeText(nameof(ClassificationData.NGramText))
                 .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(ClassificationData.FileGroupType)))
-                .Append(MlContext.Transforms.Concatenate(featuresColumnName, nameof(ClassificationData.NGramText), nameof(ClassificationData.FileGroupType)))
-                .Append(MlContext.BinaryClassification.Trainers.SdcaLogisticRegression(labelColumnName: "Label", featureColumnName: featuresColumnName));
+                .Append(MlContext.Transforms.Concatenate(featuresColumnName, nameof(ClassificationData.NGramText), nameof(ClassificationData.FileGroupType)));
+            
+            var trainer = MlContext.BinaryClassification.Trainers.FastTree(labelColumnName: nameof(ClassificationData.Label), featureColumnName: featuresColumnName,
+                            numberOfLeaves: 20,
+                            numberOfTrees: 100,
+                            minimumExampleCountPerLeaf: 10,
+                            learningRate: 0.2);
 
-            var model = estimator.Fit(splitDataView.TrainSet);
+            var trainingPipeline = dataProcessPipeline.Append(trainer);
+
+            var model = trainingPipeline.Fit(splitDataView.TrainSet);
 
             Logger<TrainerCommandLineOptions>.Debug($"Model trained in {DateTime.Now.Subtract(startDate).TotalSeconds} seconds", options);
 
