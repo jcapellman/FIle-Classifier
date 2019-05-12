@@ -22,10 +22,10 @@ namespace FileClassifier.Trainer
                 "Folder containing data to be parsed to build the model",
                 new Argument<string>());
 
-            Option oClustering = new Option(
-                "--clustering",
-                "Clustering engine",
-                new Argument<bool>());
+            Option oModelType = new Option(
+                "--modeltype",
+                "Model Type",
+                new Argument<ModelType>());
 
             var rootCommand = new RootCommand
             {
@@ -34,7 +34,7 @@ namespace FileClassifier.Trainer
 
             rootCommand.AddOption(oFolder);
             rootCommand.AddOption(oVerbose);
-            rootCommand.AddOption(oClustering);
+            rootCommand.AddOption(oModelType);
 
             rootCommand.TreatUnmatchedTokensAsErrors = true;
 
@@ -50,7 +50,7 @@ namespace FileClassifier.Trainer
                 }
             });
 
-            rootCommand.Handler = CommandHandler.Create<string, bool, bool>((folderPath, verbose, clustering) =>
+            rootCommand.Handler = CommandHandler.Create<string, bool, ModelType>((folderPath, verbose, modelType) =>
             {
                 if (string.IsNullOrEmpty(folderPath))
                 {
@@ -60,7 +60,8 @@ namespace FileClassifier.Trainer
                 options = new TrainerCommandLineOptions
                 {
                     FolderOfData = folderPath,
-                    LogLevel = LogLevels.DEBUG
+                    LogLevel = LogLevels.DEBUG,
+                    ModelType = modelType
                 };
             });
 
