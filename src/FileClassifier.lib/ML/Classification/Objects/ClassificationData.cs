@@ -1,4 +1,6 @@
-﻿using FileClassifier.lib.ML.Base.Objects;
+﻿using System;
+
+using FileClassifier.lib.ML.Base.Objects;
 
 using Microsoft.ML.Data;
 
@@ -13,6 +15,6 @@ namespace FileClassifier.lib.ML.Classification.Objects
         public bool Malicious;
 
         [LoadColumn(2)]
-        public int FileGroupType;
+        public Single FileGroupType;
     }
 }

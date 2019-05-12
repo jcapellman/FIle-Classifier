@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <None Remove="clustering.mdl" />
+    <None Remove="Models\classification.mdl" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Models\classification.mdl" />
     <EmbeddedResource Include="Models\clustering.mdl" />
   </ItemGroup>
 

@@ -26,11 +26,11 @@ namespace FileClassifier.lib.ML.Classification
         {
             var classificationData = new ClassificationData
             {
-                NGramText = GetStrings(response.Data, 0, response.Data.Length),
+                NGramText = GetStrings(response.Data, 0, 128),
                 Malicious = false
             };
 
-            return (classificationData, $"{classificationData.NGramText},{response.IsMalicious},{(int)response.FileGroup}");
+            return (classificationData, $"\"{classificationData.NGramText}\"\t{response.IsMalicious}\t{(int)response.FileGroup}");
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)
@@ -45,9 +45,9 @@ namespace FileClassifier.lib.ML.Classification
 
             var featuresColumnName = "Features";
 
-            var estimator = MlContext.Transforms.Text.FeaturizeText(outputColumnName: "NGramTextK",
-                inputColumnName: nameof(ClassificationData.NGramText))
-                .Append(MlContext.Transforms.Concatenate(featuresColumnName, "MGramTextK", nameof(ClassificationData.Malicious), nameof(ClassificationData.FileGroupType)))
+            var estimator = MlContext.Transforms.Text.FeaturizeText(nameof(ClassificationData.NGramText))
+                .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(ClassificationData.FileGroupType)))
+                .Append(MlContext.Transforms.Concatenate(featuresColumnName, nameof(ClassificationData.NGramText), nameof(ClassificationData.FileGroupType)))
                 .Append(MlContext.BinaryClassification.Trainers.SdcaLogisticRegression(labelColumnName: "Label", featureColumnName: featuresColumnName));
 
             var model = estimator.Fit(splitDataView.TrainSet);

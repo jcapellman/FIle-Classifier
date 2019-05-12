@@ -81,6 +81,8 @@ namespace FileClassifier.lib.ML.Base
                             continue;
                         }
 
+                        line = line.Replace("^", "").Replace(")", "").Replace("-", "");
+
                         stringLines.Append(string.Join(string.Empty,
                             _stringRex.Matches(line).Where(a => !string.IsNullOrEmpty(a.Value) && !string.IsNullOrWhiteSpace(a.Value)).ToList()));
                     }
