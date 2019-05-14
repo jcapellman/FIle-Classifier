@@ -26,7 +26,7 @@ namespace FileClassifier.lib.ML.Classification
         {
             var classificationData = new ClassificationData
             {
-                NGramText = GetStrings(response.Data, 0, 128),
+                NGramText = GetStrings(response.Data, 0, 65536),
                 Malicious = false
             };
 
@@ -48,7 +48,7 @@ namespace FileClassifier.lib.ML.Classification
             var estimator = MlContext.Transforms.Text.FeaturizeText(nameof(ClassificationData.NGramText))
                 .Append(MlContext.Transforms.NormalizeMeanVariance(nameof(ClassificationData.FileGroupType)))
                 .Append(MlContext.Transforms.Concatenate(featuresColumnName, nameof(ClassificationData.NGramText), nameof(ClassificationData.FileGroupType)))
-                .Append(MlContext.BinaryClassification.Trainers.SdcaLogisticRegression(labelColumnName: "Label", featureColumnName: featuresColumnName));
+                .Append(MlContext.BinaryClassification.Trainers.FastTree(labelColumnName: "Label", featureColumnName: featuresColumnName));
 
             var model = estimator.Fit(splitDataView.TrainSet);
 
