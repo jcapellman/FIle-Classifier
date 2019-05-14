@@ -27,10 +27,10 @@ namespace FileClassifier.lib.ML.Classification
             var classificationData = new ClassificationData
             {
                 NGramText = GetStrings(response.Data, 0, 65536),
-                Malicious = false
+                FileGroupType = (int)response.FileGroup
             };
 
-            return (classificationData, $"\"{classificationData.NGramText}\"\t{response.IsMalicious}\t{(int)response.FileGroup}");
+            return (classificationData, $"\"{classificationData.NGramText}\"\t{(int)response.FileGroup}");
         }
 
         public override bool TrainModel(TrainerCommandLineOptions options)
