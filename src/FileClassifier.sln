@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileClassifier.UnitTests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileClassifier.Trainer", "FileClassifier.Trainer\FileClassifier.Trainer.csproj", "{BF7B6032-0F08-4384-B2D9-262471C4E6C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileClassifier.SparkWorker", "FileClassifier.SparkWorker\FileClassifier.SparkWorker.csproj", "{C90B599B-C3CC-4E0D-8554-E059235FA802}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileClassifier.SparkWorker", "FileClassifier.SparkWorker\FileClassifier.SparkWorker.csproj", "{C90B599B-C3CC-4E0D-8554-E059235FA802}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileClassifier.Web", "FileClassifier.Web\FileClassifier.Web.csproj", "{BC58314B-5E9C-444E-9B6F-C59C4B46FC8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C90B599B-C3CC-4E0D-8554-E059235FA802}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C90B599B-C3CC-4E0D-8554-E059235FA802}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C90B599B-C3CC-4E0D-8554-E059235FA802}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC58314B-5E9C-444E-9B6F-C59C4B46FC8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC58314B-5E9C-444E-9B6F-C59C4B46FC8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC58314B-5E9C-444E-9B6F-C59C4B46FC8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC58314B-5E9C-444E-9B6F-C59C4B46FC8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
