@@ -2,3 +2,13 @@
 
 @Model.ClusterResult.Confidence
 @Model.ClusterResult.FileName
+@Model.ClusterResult.FileGroup
+@Model.ClusterResult.IsMalicious
+@Model.ClusterResult.SHA1Hash
+@Model.ClusterResult.SizeInBytes
+@Model.ClusterResult.Status
+
+@if (!string.IsNullOrEmpty(Model.ClusterResult.Exception))
+{
+    @Model.ClusterResult.Exception
+}
