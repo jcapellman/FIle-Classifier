@@ -1,14 +1,14 @@
-﻿@model FileClassifier.Web.Models.ResultViewModel
+﻿@model FileClassifier.lib.Common.ClassifierResponseItem
 
-@Model.ClusterResult.Confidence
-@Model.ClusterResult.FileName
-@Model.ClusterResult.FileGroup
-@Model.ClusterResult.IsMalicious
-@Model.ClusterResult.SHA1Hash
-@Model.ClusterResult.SizeInBytes
-@Model.ClusterResult.Status
+@Model.Confidence
+@Model.FileName
+@Model.FileGroup
+@Model.IsMalicious
+@Model.SHA1Hash
+@Model.SizeInBytes
+@Model.Status
 
-@if (!string.IsNullOrEmpty(Model.ClusterResult.Exception))
+@if (Model.Exception != null)
 {
-    @Model.ClusterResult.Exception
+    @Model.Exception
 }

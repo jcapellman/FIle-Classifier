@@ -8,11 +8,16 @@ using Microsoft.AspNetCore.Mvc;
 using FileClassifier.Web.Models;
 
 using FileClassifier.lib.ML.Clustering;
+using FileClassifier.lib.ML.Classification;
 
 namespace FileClassifier.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private static readonly ClusteringEngine clusteringEngine = new ClusteringEngine();
+
+        private static readonly ClassificationEngine classificationEngine = new ClassificationEngine();
+
         public IActionResult Index()
         {
             return View();
@@ -25,17 +30,17 @@ namespace FileClassifier.Web.Controllers
             {
                 await file.CopyToAsync(memoryStream);
 
-                var classifier = new ClusteringEngine();
-
-                var model = new ResultViewModel();
-
-                model.ClusterResult = classifier.Predict(new lib.Common.ClassifierResponseItem(memoryStream.ToArray(), file.FileName), new lib.Options.ClassifierCommandLineOptions
+                var options = new lib.Options.ClassifierCommandLineOptions
                 {
                     FileName = file.FileName,
                     LogLevel = lib.Enums.LogLevels.DEBUG
-                });
+                };
 
-                return View("Result", model);
+                var response = clusteringEngine.Predict(new lib.Common.ClassifierResponseItem(memoryStream.ToArray(), file.FileName), options);
+
+                response = classificationEngine.Predict(response, options);
+
+                return View("Result", response);
             }
         }
 
