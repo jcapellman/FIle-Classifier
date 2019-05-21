@@ -14,14 +14,11 @@ namespace FileClassifier.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private static readonly ClusteringEngine clusteringEngine = new ClusteringEngine();
+        private static readonly ClusteringEngine ClusteringEngine = new ClusteringEngine();
 
-        private static readonly ClassificationEngine classificationEngine = new ClassificationEngine();
+        private static readonly ClassificationEngine ClassificationEngine = new ClassificationEngine();
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file)
@@ -36,18 +33,15 @@ namespace FileClassifier.Web.Controllers
                     LogLevel = lib.Enums.LogLevels.DEBUG
                 };
 
-                var response = clusteringEngine.Predict(new lib.Common.ClassifierResponseItem(memoryStream.ToArray(), file.FileName), options);
+                var response = ClusteringEngine.Predict(new lib.Common.ClassifierResponseItem(memoryStream.ToArray(), file.FileName), options);
 
-                response = classificationEngine.Predict(response, options);
+                response = ClassificationEngine.Predict(response, options);
 
                 return View("Result", response);
             }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
