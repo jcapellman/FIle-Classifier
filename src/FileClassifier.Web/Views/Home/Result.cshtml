@@ -1,72 +1,70 @@
 ﻿@model FileClassifier.lib.Common.ClassifierResponseItem
 
-<div class="row">
-    <div class="col-3 mx-auto">
-        <div class="row">
-            <div class="itemrow header">
-                FILE NAME
-            </div>
-
-            <div class="itemrow">
-                @Model.FileName
-            </div>
+<div id="resultContent">
+    <div class="row result">
+        <div class="itemrow header">
+            FILE NAME
         </div>
 
-        <div class="row">
-            <div class="itemrow header">
-                SHA1
-            </div>
-
-            <div class="itemrow">
-                @Model.SHA1Hash
-            </div>
+        <div class="itemrow">
+            @Model.FileName
         </div>
-
-        <div class="row">
-            <div class="itemrow header">
-                FILE SIZE (Bytes)
-            </div>
-
-            <div class="itemrow">
-                @Model.SizeInBytes
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="itemrow header">
-                FILE TYPE
-            </div>
-
-            <div class="itemrow">
-                @Model.FileGroup
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="itemrow header">
-                FILE CLASSIFICATION
-            </div>
-
-            <div class="itemrow">
-                @Model.IsMalicious
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="itemrow header">
-                FILE CONFIDENCE
-            </div>
-
-            <div class="itemrow">
-                @Model.Confidence
-            </div>
-        </div>
-
-        @if (Model.Exception != null)
-        {
-            <div>
-                @Model.Exception
-            </div>
-        }
     </div>
+
+    <div class="row result">
+        <div class="itemrow header">
+            SHA1
+        </div>
+
+        <div class="itemrow">
+            @Model.SHA1Hash
+        </div>
+    </div>
+
+    <div class="row result">
+        <div class="itemrow header">
+            FILE SIZE (Bytes)
+        </div>
+
+        <div class="itemrow">
+            @Model.SizeInBytes
+        </div>
+    </div>
+
+    <div class="row result">
+        <div class="itemrow header">
+            FILE TYPE
+        </div>
+
+        <div class="itemrow">
+            @Model.FileGroup
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="itemrow header">
+            IS MALICIOUS
+        </div>
+
+        <div class="itemrow">
+            @Model.IsMalicious
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="itemrow header">
+            FILE CONFIDENCE
+        </div>
+
+        <div class="itemrow">
+            @Model.Confidence
+        </div>
+    </div>
+
+    @if (Model.Exception != null)
+    {
+        <div>
+            @Model.Exception
+        </div>
+    }
 </div>

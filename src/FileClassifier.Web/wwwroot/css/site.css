@@ -51,7 +51,7 @@ body {
 
 .itemrow {
     text-align: left;
-    width: 50%;
+    width: 40%;
 }
 
 .itemrow header {
@@ -64,7 +64,23 @@ body {
     background: #fff;
     padding: 30px;
     width: 90%;
-    max-width: 450px;
+    max-width: 500px;
+    position: relative;
+    padding: 0px;
+    -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+    text-align: center;
+    height: 250px;
+    vertical-align: middle;
+}
+
+#resultContent {
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+    background: #fff;
+    padding: 30px;
+    width: 100%;
+    max-width: 650px;
     position: relative;
     padding: 0px;
     -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
@@ -83,4 +99,10 @@ body {
     min-height: 100%;
     padding: 20px;
     vertical-align: middle;
+}
+
+.row .result {
+    margin-top: 10px;
+    margin-left: 10px;
+    text-shadow: 0 0 1px black;
 }
