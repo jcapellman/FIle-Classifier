@@ -80,13 +80,14 @@ body {
     background: #fff;
     padding: 30px;
     width: 100%;
-    max-width: 650px;
+    max-width: 45%;
+    min-width: 580px;
     position: relative;
-    padding: 0px;
+    padding: 20px;
     -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
     box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
     text-align: center;
-    height: 250px;
+    height: 300px;
     vertical-align: middle;
 }
 
