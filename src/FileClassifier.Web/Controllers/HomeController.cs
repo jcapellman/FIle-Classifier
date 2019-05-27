@@ -1,11 +1,8 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using FileClassifier.Web.Models;
 
 using FileClassifier.lib.ML.Clustering;
 using FileClassifier.lib.ML.Classification;
@@ -21,6 +18,7 @@ namespace FileClassifier.Web.Controllers
         public IActionResult Index() => View();
 
         [HttpPost]
+        [RequestSizeLimit(10_000_000)]
         public async Task<IActionResult> Upload(IFormFile file)
         {
             using (var memoryStream = new MemoryStream())
@@ -41,7 +39,9 @@ namespace FileClassifier.Web.Controllers
             }
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        public IActionResult Error(string id)
+        {
+            return View();
+        }
     }
 }
