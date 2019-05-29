@@ -23,4 +23,7 @@
       <Version>2.2.3</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FileClassifier.lib\FileClassifier.lib.csproj" />
+  </ItemGroup>
 </Project>

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Http;
+using FileClassifier.lib.JobObjects;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace FileClassifier.JobManager.REST.Controllers
@@ -13,23 +12,26 @@ namespace FileClassifier.JobManager.REST.Controllers
     public class ValuesController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public List<JobStatusResponseItem> Get()
         {
             // Returns all current jobs
-            return new string[] { "value1", "value2" };
+            return new List<JobStatusResponseItem>();
         }
 
         [HttpGet("{id}")]
-        public ActionResult<string> Get(Guid id)
+        public JobStatusResponseItem Get(Guid id)
         {
-            // Return Job Status based on the 
-            return "value";
+            return new JobStatusResponseItem();
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public Guid Post([FromBody]JobSubmissionRequestItem item)
         {
-            // Handle Submission of Jobs
+            var guid = Guid.NewGuid();
+
+            // Store the item
+
+            return guid;
         }
 
         [HttpDelete("{id}")]
