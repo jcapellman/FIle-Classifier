@@ -25,6 +25,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FileClassifier.JobManager.lib\FileClassifier.JobManager.lib.csproj" />
     <ProjectReference Include="..\FileClassifier.lib\FileClassifier.lib.csproj" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
 ﻿using System;
 
-using FileClassifier.JobManager.REST.Databases.Tables;
+using FileClassifier.JobManager.lib.Databases.Tables;
 
-namespace FileClassifier.JobManager.REST.Databases.Base
+namespace FileClassifier.JobManager.lib.Databases.Base
 {
     public interface IDatabase
     {

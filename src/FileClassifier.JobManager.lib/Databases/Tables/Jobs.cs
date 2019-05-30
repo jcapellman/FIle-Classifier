@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileClassifier.JobManager.REST.Databases.Tables
+namespace FileClassifier.JobManager.lib.Databases.Tables
 {
     public class Jobs
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 
-using FileClassifier.JobManager.REST.Databases.Base;
-using FileClassifier.JobManager.REST.Databases.Tables;
+using FileClassifier.JobManager.lib.Databases.Base;
+using FileClassifier.JobManager.lib.Databases.Tables;
 
 using LiteDB;
 
-namespace FileClassifier.JobManager.REST.Databases
+namespace FileClassifier.JobManager.lib.Databases
 {
     public class LiteDBDatabase : IDatabase
     {
