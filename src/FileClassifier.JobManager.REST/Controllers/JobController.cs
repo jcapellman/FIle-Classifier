@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using FileClassifier.JobManager.lib.Databases.Base;
+using FileClassifier.JobManager.lib.Databases.Tables;
 using FileClassifier.lib.JobObjects;
 
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +11,15 @@ namespace FileClassifier.JobManager.REST.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class JobController : ControllerBase
     {
+        private IDatabase _database;
+
+        public JobController(IDatabase database)
+        {
+            _database = database;
+        }
+
         [HttpGet]
         public List<JobStatusResponseItem> Get()
         {
@@ -29,15 +38,23 @@ namespace FileClassifier.JobManager.REST.Controllers
         {
             var guid = Guid.NewGuid();
 
-            // Store the item
+            var job = new Jobs
+            {
+                ID = guid,
+                Completed = false,
+                Name = item.Name,
+                SubmissionTime = DateTime.Now
+            };
 
+            _database.AddJob(job);
+            
             return guid;
         }
 
         [HttpDelete("{id}")]
         public void Delete(Guid id)
         {
-            // Deletes the specified job
+            _database.DeleteJob(id);
         }
     }
 }
