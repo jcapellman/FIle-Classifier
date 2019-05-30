@@ -1,9 +1,12 @@
+using FileClassifier.JobManager.lib.Databases;
+using FileClassifier.JobManager.lib.Databases.Base;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace FileClassifier.JobManager.REST
@@ -20,6 +23,8 @@ namespace FileClassifier.JobManager.REST
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+
+            services.AddSingleton<IDatabase>(new LiteDBDatabase());
 
             services.AddMvc();
         }
