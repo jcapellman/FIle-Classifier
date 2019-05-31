@@ -9,11 +9,11 @@ namespace FileClassifier.JobManager.lib.Databases
 {
     public class LiteDBDatabase : IDatabase
     {
-        private const string DB_FILENAME = "data.db";
+        private const string DbFilename = "data.db";
 
         public bool DeleteJob(Guid id)
         {
-            using (var db = new LiteDatabase(DB_FILENAME))
+            using (var db = new LiteDatabase(DbFilename))
             {
                 return db.GetCollection<Jobs>().Delete(a => a.ID == id) > 0;
             }
@@ -21,7 +21,7 @@ namespace FileClassifier.JobManager.lib.Databases
 
         public bool AddJob(Jobs item)
         {
-            using (var db = new LiteDatabase(DB_FILENAME))
+            using (var db = new LiteDatabase(DbFilename))
             {
                 return db.GetCollection<Jobs>().Insert(item) != null;
             }
@@ -29,7 +29,7 @@ namespace FileClassifier.JobManager.lib.Databases
 
         public bool UpdateJob(Jobs item)
         {
-            using (var db = new LiteDatabase(DB_FILENAME))
+            using (var db = new LiteDatabase(DbFilename))
             {
                 return db.GetCollection<Jobs>().Update(item);
             }
