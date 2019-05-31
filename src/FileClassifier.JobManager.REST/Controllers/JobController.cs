@@ -20,23 +20,13 @@ namespace FileClassifier.JobManager.REST.Controllers
         }
 
         [HttpGet]
-        public List<Jobs> Get()
-        {
-            // Returns all current jobs
-            return new List<Jobs>();
-        }
+        public List<Jobs> Get() => _database.GetJobs();
 
         [HttpGet("{id}")]
-        public Jobs Get(Guid id)
-        {
-            return new Jobs();
-        }
+        public Jobs Get(Guid id) => _database.GetJob(id);
 
         [HttpPut]
-        public bool Put(Jobs item)
-        {
-            return _database.UpdateJob(item);
-        }
+        public bool Put(Jobs item) => _database.UpdateJob(item);
 
         [HttpPost]
         public Guid Post([FromBody]Jobs item)
