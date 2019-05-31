@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using FileClassifier.JobManager.lib.Databases.Base;
 using FileClassifier.JobManager.lib.Databases.Tables;
-using FileClassifier.lib.JobObjects;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,34 +20,32 @@ namespace FileClassifier.JobManager.REST.Controllers
         }
 
         [HttpGet]
-        public List<JobStatusResponseItem> Get()
+        public List<Jobs> Get()
         {
             // Returns all current jobs
-            return new List<JobStatusResponseItem>();
+            return new List<Jobs>();
         }
 
         [HttpGet("{id}")]
-        public JobStatusResponseItem Get(Guid id)
+        public Jobs Get(Guid id)
         {
-            return new JobStatusResponseItem();
+            return new Jobs();
+        }
+
+        [HttpPut]
+        public bool Put(Jobs item)
+        {
+            return _database.UpdateJob(item);
         }
 
         [HttpPost]
-        public Guid Post([FromBody]JobSubmissionRequestItem item)
+        public Guid Post([FromBody]Jobs item)
         {
-            var guid = Guid.NewGuid();
+            item.ID = Guid.NewGuid();
 
-            var job = new Jobs
-            {
-                ID = guid,
-                Completed = false,
-                Name = item.Name,
-                SubmissionTime = DateTime.Now
-            };
-
-            _database.AddJob(job);
+            _database.AddJob(item);
             
-            return guid;
+            return item.ID;
         }
 
         [HttpDelete("{id}")]
