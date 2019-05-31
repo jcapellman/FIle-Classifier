@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileClassifier.Web", "FileC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileClassifier.JobManager.REST", "FileClassifier.JobManager.REST\FileClassifier.JobManager.REST.csproj", "{E018CB0D-18CA-4B32-A381-80B1CDE52568}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileClassifier.JobManager.lib", "FileClassifier.JobManager.lib\FileClassifier.JobManager.lib.csproj", "{26D9A624-0D8B-4353-ABC7-F58D3264E893}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileClassifier.JobManager.lib", "FileClassifier.JobManager.lib\FileClassifier.JobManager.lib.csproj", "{26D9A624-0D8B-4353-ABC7-F58D3264E893}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileClassifier.JobManager.Uploader", "FileClassifier.JobManager.Uploader\FileClassifier.JobManager.Uploader.csproj", "{2730CF68-FCD5-42A8-8791-E4E676BAC189}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{26D9A624-0D8B-4353-ABC7-F58D3264E893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26D9A624-0D8B-4353-ABC7-F58D3264E893}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26D9A624-0D8B-4353-ABC7-F58D3264E893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2730CF68-FCD5-42A8-8791-E4E676BAC189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2730CF68-FCD5-42A8-8791-E4E676BAC189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2730CF68-FCD5-42A8-8791-E4E676BAC189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2730CF68-FCD5-42A8-8791-E4E676BAC189}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
