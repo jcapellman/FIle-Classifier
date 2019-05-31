@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using FileClassifier.JobManager.lib.Databases.Base;
 using FileClassifier.JobManager.lib.Databases.Tables;
@@ -32,6 +34,22 @@ namespace FileClassifier.JobManager.lib.Databases
             using (var db = new LiteDatabase(DbFilename))
             {
                 return db.GetCollection<Jobs>().Update(item);
+            }
+        }
+
+        public Jobs GetJob(Guid id)
+        {
+            using (var db = new LiteDatabase(DbFilename))
+            {
+                return db.GetCollection<Jobs>().FindOne(a => a.ID == id);
+            }
+        }
+
+        public List<Jobs> GetJobs()
+        {
+            using (var db = new LiteDatabase(DbFilename))
+            {
+                return db.GetCollection<Jobs>().FindAll().ToList();
             }
         }
     }
