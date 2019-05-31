@@ -10,6 +10,8 @@ namespace FileClassifier.JobManager.lib.Databases.Tables
 
         public DateTime SubmissionTime { get; set; }
 
+        public DateTime CompletedTime { get; set; }
+
         public bool Completed { get; set; }
     }
 }
