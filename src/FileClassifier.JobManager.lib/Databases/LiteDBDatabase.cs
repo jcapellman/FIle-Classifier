@@ -57,6 +57,8 @@ namespace FileClassifier.JobManager.lib.Databases
         {
             using (var db = new LiteDatabase(DbFilename))
             {
+                host.LastConnected = DateTime.Now;
+
                 db.GetCollection<Hosts>().Upsert(host);
             }
         }
