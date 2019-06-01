@@ -10,7 +10,7 @@ namespace FileClassifier.JobManager.lib.Databases.Tables
 
         public int NumCores { get; set; }
 
-        public int NumGBOfRam { get; set; }
+        public string OSVersion { get; set; }
 
         public DateTime LastConnected { get; set; }
         
