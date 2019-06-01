@@ -13,8 +13,13 @@ namespace FileClassifier.JobManager.REST.Controllers
     {
         private IDatabase _database;
 
+        public HostController(IDatabase database)
+        {
+            _database = database;
+        }
+
         [HttpPost]
-        public void AddUpdateHost(Hosts host)
+        public void Post([FromBody]Hosts host)
         {
             _database.AddUpdateHost(host);       
         }
