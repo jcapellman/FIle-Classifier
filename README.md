@@ -4,20 +4,20 @@ At a high level File Classifier (just a temporary name) is a dual model file cla
 Breaking down the project a bit further:
 
 ### Machine Learning
-* Trainer Application (.NET Core 3) - (FileClassifier.Trainer) - Trains and builds models
-* Library (.NET Core 3) - (FileClassifier.lib) - Contains all of the common code for the entire project
+* Trainer Application (.NET Core 2.2.5) - (FileClassifier.Trainer) - Trains and builds models
+* Library (.NET Core 2.2.5) - (FileClassifier.lib) - Contains all of the common code for the entire project
 
 ### Job Manager
-* Job Uploader (.NET Core 3)
-* REST Service (ASP.NET Core 3)
-* Job Worker (.NET Core 3)
+* Job Uploader (.NET Core 2.2.5)
+* REST Service (ASP.NET Core 2.2.5)
+* Job Worker (.NET Core 2.2.5)
 
 ### End User
-* Console Application (.NET Core 3)
-* Web Application (ASP.NET Core 3)
+* Console Application (.NET Core 2.2.5)
+* Web Application (ASP.NET Core 2.2.5)
 
 ### Unit Tests
-* Coverage across all of the projects
+* Coverage across all of the projects (.NET Core 3) - (FileClassifier.UnitTests)
 
 ## Milestones
 Currently the project is broken into a couple major pieces:
