@@ -52,5 +52,29 @@ namespace FileClassifier.JobManager.lib.Databases
                 return db.GetCollection<Jobs>().FindAll().ToList();
             }
         }
+
+        public void AddUpdateHost(Hosts host)
+        {
+            using (var db = new LiteDatabase(DbFilename))
+            {
+                db.GetCollection<Hosts>().Upsert(host);
+            }
+        }
+
+        public void DeleteHost(Guid id)
+        {
+            using (var db = new LiteDatabase(DbFilename))
+            {
+                db.GetCollection<Hosts>().Delete(a => a.ID == id);
+            }
+        }
+
+        public List<Hosts> GetHosts()
+        {
+            using (var db = new LiteDatabase(DbFilename))
+            {
+                return db.GetCollection<Hosts>().FindAll().ToList();
+            }
+        }
     }
 }
