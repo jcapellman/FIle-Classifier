@@ -23,3 +23,6 @@ Currently the project is broken into a couple major pieces:
 * Create the Job Manager platform
 * Re-train Models
 * Test Models
+
+## Deployment
+An extremely early Web Application front end has been deployed to http://165.22.8.132/.  This contains very early models, an early UI and un-optimized code.
