@@ -16,5 +16,11 @@ namespace FileClassifier.JobManager.lib.Databases.Base
         Jobs GetJob(Guid id);
 
         List<Jobs> GetJobs();
+
+        void AddUpdateHost(Hosts host);
+
+        void DeleteHost(Guid id);
+
+        List<Hosts> GetHosts();
     }
 }
