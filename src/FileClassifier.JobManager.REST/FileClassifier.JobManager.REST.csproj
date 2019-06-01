@@ -28,4 +28,7 @@
     <ProjectReference Include="..\FileClassifier.JobManager.lib\FileClassifier.JobManager.lib.csproj" />
     <ProjectReference Include="..\FileClassifier.lib\FileClassifier.lib.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Shared\" />
+  </ItemGroup>
 </Project>
