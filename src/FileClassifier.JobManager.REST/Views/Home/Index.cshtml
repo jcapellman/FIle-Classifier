@@ -1,5 +1,31 @@
-﻿@model List<FileClassifier.JobManager.lib.Databases.Tables.Jobs>
+﻿@model FileClassifier.JobManager.REST.Models.HomeDashboardModel
 
+<h3>Hosts</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col"># Cores</th>
+            <th scope="col"># GB of RAM</th>
+            <th scope="col">Last Connected</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var host in Model.Hosts)
+        {
+            <tr>
+                <th scope="row">@host.ID</th>
+                <td>@host.Name</td>
+                <td>@host.NumCores</td>
+                <td>@host.NumGBOfRam</td>
+                <td>@host.LastConnected</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Jobs</h3>
 <table class="table">
     <thead>
         <tr>
@@ -10,7 +36,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var job in Model)
+        @foreach (var job in Model.Jobs)
         {
             <tr>
                 <th scope="row">@job.ID</th>
