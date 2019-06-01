@@ -59,7 +59,17 @@ namespace FileClassifier.JobManager.lib.Databases
             {
                 host.LastConnected = DateTime.Now;
 
-                db.GetCollection<Hosts>().Upsert(host);
+                var dbHost = db.GetCollection<Hosts>().FindOne(a => a.Name == host.Name);
+
+                if (dbHost == null)
+                {
+                    db.GetCollection<Hosts>().Insert(host);
+                } else
+                {
+                    host.ID = dbHost.ID;
+
+                    db.GetCollection<Hosts>().Update(host);
+                }
             }
         }
 
