@@ -11,7 +11,7 @@ namespace FileClassifier.JobManager.REST.Controllers
     [ApiController]
     public class HostController : ControllerBase
     {
-        private IDatabase _database;
+        private readonly IDatabase _database;
 
         public HostController(IDatabase database)
         {

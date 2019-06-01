@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using FileClassifier.JobManager.lib.Databases.Base;
 using FileClassifier.JobManager.lib.Databases.Tables;
@@ -32,6 +33,33 @@ namespace FileClassifier.JobManager.REST.Controllers
         public Guid Post([FromBody]Jobs item)
         {
             item.ID = Guid.NewGuid();
+
+            var hosts = _database.GetHosts();
+
+            if (hosts.Any())
+            {
+                var jobs = _database.GetJobs().Where(a => !a.Completed);
+
+                foreach (var host in hosts)
+                {
+                    if (jobs.Any(a => a.AssignedHost == host.Name))
+                    {
+                        continue;
+                    }
+
+                    item.AssignedHost = host.Name;
+
+                    break;
+                }
+
+                if (string.IsNullOrEmpty(item.AssignedHost))
+                {
+                    item.AssignedHost = lib.Common.Constants.UNASSIGNED_JOB;
+                }
+            } else
+            {
+                item.AssignedHost = lib.Common.Constants.UNASSIGNED_JOB;
+            }
 
             _database.AddJob(item);
             
