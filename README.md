@@ -16,6 +16,9 @@ Breaking down the project a bit further:
 * Console Application (.NET Core 3)
 * Web Application (ASP.NET Core 3)
 
+### Unit Tests
+* Coverage across all of the projects
+
 ## Milestones
 Currently the project is broken into a couple major pieces:
 * Gather samples
