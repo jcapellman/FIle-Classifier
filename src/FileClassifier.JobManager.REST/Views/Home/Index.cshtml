@@ -1,2 +1,23 @@
 ﻿@model List<FileClassifier.JobManager.lib.Databases.Tables.Jobs>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Submit Time</th>
+            <th scope="col">Completed?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <th scope="row">@job.ID</th>
+                <td>@job.Name</td>
+                <td>@job.SubmissionTime</td>
+                <td>@job.Completed</td>
+            </tr>
+        }
+    </tbody>
+</table>
