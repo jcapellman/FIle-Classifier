@@ -28,7 +28,7 @@ namespace FileClassifier.JobManager.Worker
                 Name = Environment.MachineName,
                 NumCores = Environment.ProcessorCount,
                 WorkerVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-                NumGBOfRam = Environment.SystemPageSize
+                OSVersion = Environment.OSVersion.VersionString
             };
 
             while (true)
