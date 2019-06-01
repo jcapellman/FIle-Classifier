@@ -29,7 +29,6 @@
     <ProjectReference Include="..\FileClassifier.lib\FileClassifier.lib.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewFolder\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
 </Project>
