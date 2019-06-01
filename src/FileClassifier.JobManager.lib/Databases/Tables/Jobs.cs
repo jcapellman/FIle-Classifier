@@ -6,6 +6,8 @@ namespace FileClassifier.JobManager.lib.Databases.Tables
     {
         public Guid ID { get; set; }
 
+        public string AssignedHost { get; set; }
+
         public string Name { get; set; }
 
         public DateTime SubmissionTime { get; set; }
