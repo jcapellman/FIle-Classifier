@@ -21,7 +21,8 @@ namespace FileClassifier.JobManager.REST.Controllers
             Hosts = _database.GetHosts()
         });
 
-        public FileResult Download(Guid id)
+        [HttpGet]
+        public FileResult Download([FromQuery]Guid id)
         {
             var job = _database.GetJob(id);
 
