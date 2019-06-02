@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using FileClassifier.JobManager.lib.Common;
 using FileClassifier.JobManager.lib.Databases.Base;
@@ -21,13 +20,13 @@ namespace FileClassifier.JobManager.REST.Controllers
         }
 
         [HttpGet]
-        public List<Jobs> GetWork(string hostName)
+        public Jobs GetWork(string hostName)
         {
-            var assignedJobs = _database.GetJobs().Where(a => a.AssignedHost == hostName).ToList();
+            var assignedJob = _database.GetJobs().FirstOrDefault(a => a.AssignedHost == hostName && !a.Completed);
 
-            if (assignedJobs.Any())
+            if (assignedJob != null)
             {
-                return assignedJobs;
+                return assignedJob;
             }
 
             var unassignedJob = _database.GetJobs().FirstOrDefault(a => a.Name == Constants.UNASSIGNED_JOB);
@@ -35,14 +34,21 @@ namespace FileClassifier.JobManager.REST.Controllers
             // No jobs available
             if (unassignedJob == null)
             {
-                return new List<Jobs>();
+                return null;
             }
 
             // Assign the first unassigned job to the hostName
             unassignedJob.Name = hostName;
+            
             _database.UpdateJob(unassignedJob);
 
-            return new List<Jobs> { unassignedJob };
+            return unassignedJob;
+        }
+
+        [HttpPost]
+        public void UpdateWork([FromBody]Jobs job)
+        {
+            _database.UpdateJob(job);
         }
     }
 }
