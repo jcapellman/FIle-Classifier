@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
@@ -15,16 +16,15 @@ namespace FileClassifier.JobManager.Worker
 
         private readonly string _serverURL;
 
+        private BackgroundWorker _bwCheckin;
+
+        private Hosts _host;
+
         public Worker(string serverURL)
         {
             _serverURL = serverURL;
-        }
 
-        public async void RunAsync()
-        {
-            var hostHandler = new HostsHandler(_serverURL);
-
-            var host = new Hosts
+            _host = new Hosts
             {
                 Name = Environment.MachineName,
                 NumCores = Environment.ProcessorCount,
@@ -32,24 +32,42 @@ namespace FileClassifier.JobManager.Worker
                 OSVersion = Environment.OSVersion.VersionString
             };
 
+            _bwCheckin = new BackgroundWorker();
+            _bwCheckin.DoWork += BwCheckin_DoWork;
+            _bwCheckin.RunWorkerCompleted += BwCheckin_RunWorkerCompleted;
+            _bwCheckin.RunWorkerAsync();
+        }
+
+        private void BwCheckin_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            System.Threading.Thread.Sleep(LOOP_INTERVAL_MS);
+
+            _bwCheckin.RunWorkerAsync();
+        }
+
+        private async void BwCheckin_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var hostHandler = new HostsHandler(_serverURL);
+
+            // Call to checkin with the server
+            var checkinResult = await hostHandler.AddUpdateHostAsync(_host);
+
+            if (!checkinResult)
+            {
+                Console.WriteLine($"Failed to check in with {_serverURL}");
+
+                System.Threading.Thread.Sleep(LOOP_ERROR_INTERVAL_MS);
+            }
+        }
+
+        public async void RunAsync()
+        {
             var workerHandler = new WorkerHandler(_serverURL);
 
             while (true)
             {
-                // Call to checkin with the server
-                var checkinResult = await hostHandler.AddUpdateHostAsync(host);
-
-                if (!checkinResult)
-                {
-                    Console.WriteLine($"Failed to check in with {_serverURL}");
-
-                    System.Threading.Thread.Sleep(LOOP_ERROR_INTERVAL_MS);
-
-                    continue;
-                }
-
                 // Check for Work
-                var work = await workerHandler.GetWorkAsync(host.Name);
+                var work = await workerHandler.GetWorkAsync(_host.Name);
 
                 if (work.Any())
                 {

@@ -28,9 +28,7 @@ namespace FileClassifier.JobManager.lib.Handlers
 
                     var json = JsonConvert.SerializeObject(host);
 
-                    Console.WriteLine(json);
-
-                    StringContent stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+                    var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
                     var response = httpClient.PostAsync("Host", stringContent).Result;
 

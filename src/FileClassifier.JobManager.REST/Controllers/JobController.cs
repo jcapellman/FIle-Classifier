@@ -13,7 +13,7 @@ namespace FileClassifier.JobManager.REST.Controllers
     [ApiController]
     public class JobController : ControllerBase
     {
-        private IDatabase _database;
+        private readonly IDatabase _database;
 
         public JobController(IDatabase database)
         {
