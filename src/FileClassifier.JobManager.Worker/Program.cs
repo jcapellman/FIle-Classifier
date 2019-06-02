@@ -1,12 +1,14 @@
 ﻿using System.Linq;
 
+using FileClassifier.JobManager.Worker.Common;
+
 namespace FileClassifier.JobManager.Worker
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var serverUrl = "http://localhost:5000/api/";
+            var serverUrl = Constants.DEFAULT_SERVER_URL;
 
             if (args.Any())
             {
