@@ -38,7 +38,7 @@ namespace FileClassifier.JobManager.REST.Controllers
 
             if (hosts.Any())
             {
-                var jobs = _database.GetJobs().Where(a => !a.Completed);
+                var jobs = _database.GetJobs().Where(a => !a.Completed).ToList();
 
                 foreach (var host in hosts)
                 {

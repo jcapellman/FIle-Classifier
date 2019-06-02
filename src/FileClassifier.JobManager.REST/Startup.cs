@@ -2,8 +2,7 @@ using FileClassifier.JobManager.lib.Databases;
 using FileClassifier.JobManager.lib.Databases.Base;
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,11 +30,13 @@ namespace FileClassifier.JobManager.REST
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                app.UseDeveloperExceptionPage();
-            }
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
+            app.UseDeveloperExceptionPage();
+          
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
