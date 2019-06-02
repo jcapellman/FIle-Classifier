@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 using FileClassifier.JobManager.lib.Databases.Tables;
@@ -31,6 +32,8 @@ namespace FileClassifier.JobManager.Worker
                 OSVersion = Environment.OSVersion.VersionString
             };
 
+            var workerHandler = new WorkerHandler(_serverURL);
+
             while (true)
             {
                 // Call to checkin with the server
@@ -46,8 +49,22 @@ namespace FileClassifier.JobManager.Worker
                 }
 
                 // Check for Work
-                
+                var work = await workerHandler.GetWorkAsync(host.Name);
+
+                if (work.Any())
+                {
+                    System.Threading.Thread.Sleep(LOOP_INTERVAL_MS);
+
+                    continue;
+                }
+
                 // Perform Work if available
+                foreach (var job in work)
+                {
+                    // TODO: Perform Job
+                    // TODO: Update Job
+                    // TODO: Upload Model
+                }
 
                 System.Threading.Thread.Sleep(LOOP_INTERVAL_MS);
             }
