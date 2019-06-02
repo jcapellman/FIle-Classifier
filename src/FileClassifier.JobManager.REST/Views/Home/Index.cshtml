@@ -1,4 +1,5 @@
-﻿@model FileClassifier.JobManager.REST.Models.HomeDashboardModel
+﻿@using FileClassifier.JobManager.lib.Common
+@model FileClassifier.JobManager.REST.Models.HomeDashboardModel
 
 <h3>Hosts</h3>
 <table class="table table-striped table-dark">
@@ -50,11 +51,11 @@
                 {
                     <td>Completed at @job.CompletedTime</td>
                 }
-                else if (!string.IsNullOrEmpty(job.AssignedHost))
+                else if (!string.IsNullOrEmpty(job.AssignedHost) && job.AssignedHost != Constants.UNASSIGNED_JOB)
                 {
                     <td>Pending Completion</td>
                 }
-                else
+                else if (job.AssignedHost == Constants.UNASSIGNED_JOB)
                 {
                     <td>Pending Assignment</td>
                 }
