@@ -56,7 +56,7 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
 
             var outputModelPath = string.Empty;
 
-            switch (Enum.Parse(typeof(ModelType), work.ModelType))
+            switch (Enum.Parse<ModelType>(work.ModelType, true))
             {
                 case ModelType.CLASSIFICATION:
                     outputModelPath = new ClassificationEngine().TrainModel(options);
@@ -74,7 +74,14 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
             work.Completed = true;
             work.CompletedTime = DateTime.Now;
 
-            return await workerHandler.UpdateWorkAsync(work);
+            result = await workerHandler.UpdateWorkAsync(work);
+
+            if (result)
+            {
+                Console.WriteLine($"Successfully trained model and saved to {outputModelPath}");
+            }
+
+            return result;
         }
     }
 }
