@@ -13,7 +13,7 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
 
         private Hosts _host;
 
-        private readonly string _serverURL;
+        private string _serverURL;
 
         public CheckinWorker()
         {
@@ -25,6 +25,7 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
         public void Run(Hosts host, string serverURL)
         {
             _host = host;
+            _serverURL = serverURL;
 
             _bwCheckin.RunWorkerAsync();
         }
