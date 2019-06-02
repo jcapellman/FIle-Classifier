@@ -48,6 +48,7 @@ namespace FileClassifier.JobManager.REST.Controllers
         }
 
         [HttpPost]
+        [RequestSizeLimit(100_000_000)]
         public void UpdateWork([FromBody]Jobs job)
         {
             _database.UpdateJob(job);
