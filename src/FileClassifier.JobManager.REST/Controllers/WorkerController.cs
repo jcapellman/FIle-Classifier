@@ -17,19 +17,21 @@ namespace FileClassifier.JobManager.REST.Controllers
         public WorkerController(IDatabase database)
         {
             _database = database;
-        }
+        }   
 
         [HttpGet]
         public Jobs GetWork(string hostName)
         {
-            var assignedJob = _database.GetJobs().FirstOrDefault(a => a.AssignedHost == hostName && !a.Completed);
+            var jobs = _database.GetJobs().Where(a => !a.Completed).ToList();
+
+            var assignedJob = jobs.FirstOrDefault(a => a.AssignedHost == hostName);
 
             if (assignedJob != null)
             {
                 return assignedJob;
             }
 
-            var unassignedJob = _database.GetJobs().FirstOrDefault(a => a.Name == Constants.UNASSIGNED_JOB);
+            var unassignedJob = jobs.FirstOrDefault(a => a.AssignedHost == Constants.UNASSIGNED_JOB);
 
             // No jobs available
             if (unassignedJob == null)
