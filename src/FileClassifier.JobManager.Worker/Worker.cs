@@ -37,14 +37,9 @@ namespace FileClassifier.JobManager.Worker
             {
                 var workerResult = await _jWorker.Run(_host, _serverURL);
 
-                if (!workerResult)
-                {
-                    System.Threading.Thread.Sleep(Constants.LOOP_ERROR_INTERVAL_MS);
-                }
-                else
-                {
-                    System.Threading.Thread.Sleep(Constants.LOOP_INTERVAL_MS);
-                }
+                System.Threading.Thread.Sleep(!workerResult
+                    ? Constants.LOOP_ERROR_INTERVAL_MS
+                    : Constants.LOOP_INTERVAL_MS);
             }
         }
     }

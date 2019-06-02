@@ -31,7 +31,7 @@
 <table class="table table-striped table-dark">
     <thead>
         <tr>
-            <th scope="col">#</th>
+            <th scope="col">Assigned</th>
             <th scope="col">Name</th>
             <th scope="col">Submit Time</th>
             <th scope="col">Completed?</th>
@@ -42,7 +42,7 @@
         @foreach (var job in Model.Jobs)
         {
             <tr>
-                <th scope="row">@job.ID</th>
+                <th scope="row">@job.AssignedHost</th>
                 <td>@job.Name</td>
                 <td>@job.SubmissionTime</td>
                 <td>@job.Completed</td>
