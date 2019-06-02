@@ -40,7 +40,7 @@ namespace FileClassifier.JobManager.REST.Controllers
             }
 
             // Assign the first unassigned job to the hostName
-            unassignedJob.Name = hostName;
+            unassignedJob.AssignedHost = hostName;
             
             _database.UpdateJob(unassignedJob);
 
