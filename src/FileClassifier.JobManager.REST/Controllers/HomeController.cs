@@ -22,6 +22,7 @@ namespace FileClassifier.JobManager.REST.Controllers
         });
 
         [HttpGet]
+        [Route("/Download")]
         public FileResult Download([FromQuery]Guid id)
         {
             var job = _database.GetJob(id);
