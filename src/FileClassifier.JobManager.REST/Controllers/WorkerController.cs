@@ -20,9 +20,10 @@ namespace FileClassifier.JobManager.REST.Controllers
             _database = database;
         }
 
-        public List<Jobs> GetWork(string host)
+        [HttpGet]
+        public List<Jobs> GetWork(string hostName)
         {
-            var assignedJobs = _database.GetJobs().Where(a => a.AssignedHost == host).ToList();
+            var assignedJobs = _database.GetJobs().Where(a => a.AssignedHost == hostName).ToList();
 
             if (assignedJobs.Any())
             {
@@ -37,8 +38,8 @@ namespace FileClassifier.JobManager.REST.Controllers
                 return new List<Jobs>();
             }
 
-            // Assign the first unassigned job to the host
-            unassignedJob.Name = host;
+            // Assign the first unassigned job to the hostName
+            unassignedJob.Name = hostName;
             _database.UpdateJob(unassignedJob);
 
             return new List<Jobs> { unassignedJob };
