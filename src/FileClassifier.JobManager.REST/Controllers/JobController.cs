@@ -33,7 +33,8 @@ namespace FileClassifier.JobManager.REST.Controllers
         public Guid Post([FromBody]Jobs item)
         {
             item.ID = Guid.NewGuid();
-
+            item.SubmissionTime = DateTime.Now;
+            
             var hosts = _database.GetHosts();
 
             if (hosts.Any())
