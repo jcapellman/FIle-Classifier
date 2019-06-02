@@ -132,9 +132,9 @@ namespace FileClassifier.lib.ML.Base
         }
 
         protected string OutputModelPath =>
-            Path.Combine(AppContext.BaseDirectory, @"..\..\FileClassifier.lib\Models", MODEL_NAME);
+            Path.Combine(AppContext.BaseDirectory, MODEL_NAME);
 
-        protected void SaveModel(ITransformer trainedModel, DataViewSchema schema, TrainerCommandLineOptions options)
+        protected string SaveModel(ITransformer trainedModel, DataViewSchema schema, TrainerCommandLineOptions options)
         {
             using (var fileStream = new FileStream(OutputModelPath, FileMode.Create, FileAccess.Write, FileShare.Write))
             {
@@ -142,12 +142,14 @@ namespace FileClassifier.lib.ML.Base
             }
 
             Logger<TrainerCommandLineOptions>.Debug($"Model saved to {OutputModelPath}", options);
+
+            return OutputModelPath;
         }
 
         protected abstract ClassifierResponseItem UpdateResponse(TK prediction, ClassifierResponseItem response, ClassifierCommandLineOptions options);
 
         public abstract (T Data, string Output) FeatureExtraction(ClassifierResponseItem response);
 
-        public abstract bool TrainModel(TrainerCommandLineOptions options);
+        public abstract string TrainModel(TrainerCommandLineOptions options);
     }
 }
