@@ -2,6 +2,7 @@ using FileClassifier.JobManager.lib.Databases;
 using FileClassifier.JobManager.lib.Databases.Base;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,8 @@ namespace FileClassifier.JobManager.REST
             services.AddSingleton<IDatabase>(new LiteDBDatabase());
 
             services.AddMvc();
+
+            services.Configure<FormOptions>(options => options.MultipartBodyLengthLimit = long.MaxValue);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

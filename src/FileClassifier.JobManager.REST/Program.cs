@@ -14,6 +14,9 @@ namespace FileClassifier.JobManager.REST
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseUrls("http://0.0.0.0:5000")
+                .UseKestrel(options => {
+                    options.Limits.MaxRequestBodySize = null;
+                })
                 .Build();
     }
 }
