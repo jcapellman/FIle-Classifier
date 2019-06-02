@@ -34,7 +34,7 @@
             <th scope="col">Assigned</th>
             <th scope="col">Name</th>
             <th scope="col">Submit Time</th>
-            <th scope="col">Completed?</th>
+            <th scope="col">Status</th>
             <th scope="col">Download</th>
         </tr>
     </thead>
@@ -45,7 +45,20 @@
                 <th scope="row">@job.AssignedHost</th>
                 <td>@job.Name</td>
                 <td>@job.SubmissionTime</td>
-                <td>@job.Completed</td>
+
+                @if (job.Completed)
+                {
+                    <td>Completed at @job.CompletedTime</td>
+                }
+                else if (!string.IsNullOrEmpty(job.AssignedHost))
+                {
+                    <td>Pending Completion</td>
+                }
+                else
+                {
+                    <td>Pending Assignment</td>
+                }
+
                 @if (job.Model == null)
                 {
                     <td>Not Finished Yet</td>
