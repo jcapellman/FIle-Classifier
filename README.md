@@ -8,9 +8,9 @@ Breaking down the project a bit further:
 * Library (.NET Core 2.2.5) - (FileClassifier.lib) - Contains all of the common code for the entire project
 
 ### Job Manager
-* Job Uploader (.NET Core 2.2.5)
-* REST Service (ASP.NET Core 2.2.5)
-* Job Worker (.NET Core 2.2.5)
+* Job Uploader (.NET Core 2.2.5) - (FileClassifier.JobManager.Uploader) - Simple command line tool to submit new jobs
+* REST Service (ASP.NET Core 2.2.5) - (FileClassifier.JobManager.REST) - REST Service and Dashboard of the Jobs
+* Job Worker (.NET Core 2.2.5) - (FileClassifier.JobManager.Worker) - Self-contained console app
 
 ### End User
 * Console Application (.NET Core 2.2.5)
@@ -28,4 +28,6 @@ Currently the project is broken into a couple major pieces:
 * Test Models
 
 ## Deployment
-An extremely early Web Application front end has been deployed to http://165.22.8.132/.  This contains very early models, an early UI and un-optimized code.
+Involes deployment of the Job Manager REST Service/Dashboard and then the Job Workers on the various Nodes.
+
+Master branch deployments of the Job Manager REST Service/Dashboard are here: http://165.22.8.132/
