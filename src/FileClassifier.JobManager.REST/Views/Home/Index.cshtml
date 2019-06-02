@@ -35,6 +35,7 @@
             <th scope="col">Name</th>
             <th scope="col">Submit Time</th>
             <th scope="col">Completed?</th>
+            <th scope="col">Download</th>
         </tr>
     </thead>
     <tbody>
@@ -45,6 +46,7 @@
                 <td>@job.Name</td>
                 <td>@job.SubmissionTime</td>
                 <td>@job.Completed</td>
+                <td><a href="Download?id=@job.ID">Download</a></td>
             </tr>
         }
     </tbody>
