@@ -46,7 +46,7 @@ namespace FileClassifier.lib.ML.Clustering
             return (clusterData, $"{(int)response.FileGroup},{clusterData.StartStringData},{clusterData.EndStringData}");
         }
 
-        public override bool TrainModel(TrainerCommandLineOptions options)
+        public override string TrainModel(TrainerCommandLineOptions options)
         {            
             var fileName = FeatureExtractFolder(options);
 
@@ -95,9 +95,7 @@ namespace FileClassifier.lib.ML.Clustering
 
             Logger<TrainerCommandLineOptions>.Debug($"Average Distance: {metrics.AverageDistance} | Davides Bouldin Index: {metrics.DaviesBouldinIndex}", options);
 
-            SaveModel(trainedModel, trainingDataView.Schema, options);
-
-            return true;
+            return SaveModel(trainedModel, trainingDataView.Schema, options);
         }
     }
 }
