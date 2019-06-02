@@ -46,7 +46,14 @@
                 <td>@job.Name</td>
                 <td>@job.SubmissionTime</td>
                 <td>@job.Completed</td>
-                <td><a href="Download?id=@job.ID">Download</a></td>
+                @if (job.Model == null)
+                {
+                    <td>Not Finished Yet</td>
+                }
+                else
+                {
+                    <td><a href="Download?id=@job.ID">Download</a></td>
+                }
             </tr>
         }
     </tbody>
