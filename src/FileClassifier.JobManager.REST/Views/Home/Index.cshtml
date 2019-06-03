@@ -49,7 +49,7 @@
 
                 @if (job.Completed)
                 {
-                    <td>Completed at @job.CompletedTime</td>
+                    <td>Completed at @job.CompletedTime (<p title="@job.ModelEvaluationMetrics">Metrics</p>)</td>
                 }
                 else if (!string.IsNullOrEmpty(job.AssignedHost) && job.AssignedHost != Constants.UNASSIGNED_JOB)
                 {

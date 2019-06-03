@@ -54,23 +54,24 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
                 LogLevel = LogLevels.DEBUG
             };
 
-            var outputModelPath = string.Empty;
+            var (outputFile, metrics) = (string.Empty, string.Empty);
 
             switch (Enum.Parse<ModelType>(work.ModelType, true))
             {
                 case ModelType.CLASSIFICATION:
-                    outputModelPath = new ClassificationEngine().TrainModel(options);
+                    (outputFile, metrics) = new ClassificationEngine().TrainModel(options);
                     break;
                 case ModelType.CLUSTERING:
-                    outputModelPath = new ClusteringEngine().TrainModel(options);
+                    (outputFile, metrics) = new ClusteringEngine().TrainModel(options);
                     break;
             }
 
-            if (File.Exists(outputModelPath))
+            if (File.Exists(outputFile))
             {
-                work.Model = File.ReadAllBytes(outputModelPath);
+                work.Model = File.ReadAllBytes(outputFile);
             }
 
+            work.ModelEvaluationMetrics = metrics;
             work.Completed = true;
             work.CompletedTime = DateTime.Now;
 
@@ -78,7 +79,7 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
 
             if (result)
             {
-                Console.WriteLine($"Successfully trained model and saved to {outputModelPath}");
+                Console.WriteLine($"Successfully trained model and saved to {outputFile}");
             }
 
             return result;

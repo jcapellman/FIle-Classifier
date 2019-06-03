@@ -33,7 +33,7 @@ namespace FileClassifier.lib.ML.Classification
             return (classificationData, $"\"{classificationData.NGramText}\"\t{(int)response.FileGroup}");
         }
 
-        public override string TrainModel(TrainerCommandLineOptions options)
+        public override (string OutputFile, string Metrics) TrainModel(TrainerCommandLineOptions options)
         {
             var fileName = FeatureExtractFolder(options);
 
@@ -60,7 +60,7 @@ namespace FileClassifier.lib.ML.Classification
 
             Logger<TrainerCommandLineOptions>.Debug($"Accuracy: {metrics.Accuracy} | F1: {metrics.F1Score} | Auc: {metrics.AreaUnderRocCurve}", options);
 
-            return SaveModel(model, splitDataView.TrainSet.Schema, options);
+            return (SaveModel(model, splitDataView.TrainSet.Schema, options), $"Accuracy: {metrics.Accuracy} | F1: {metrics.F1Score} | Auc: {metrics.AreaUnderRocCurve}");
         }
     }
 }

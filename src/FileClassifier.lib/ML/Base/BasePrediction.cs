@@ -150,6 +150,6 @@ namespace FileClassifier.lib.ML.Base
 
         public abstract (T Data, string Output) FeatureExtraction(ClassifierResponseItem response);
 
-        public abstract string TrainModel(TrainerCommandLineOptions options);
+        public abstract (string OutputFile, string Metrics) TrainModel(TrainerCommandLineOptions options);
     }
 }
