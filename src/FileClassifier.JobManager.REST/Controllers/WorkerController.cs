@@ -10,19 +10,14 @@ namespace FileClassifier.JobManager.REST.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkerController : ControllerBase
+    public class WorkerController : BaseController
     {
-        private readonly IDatabase _database;
-
-        public WorkerController(IDatabase database)
-        {
-            _database = database;
-        }   
-
+        public WorkerController(IDatabase database) : base(database) { }
+    
         [HttpGet]
         public Jobs GetWork(string hostName)
         {
-            var jobs = _database.GetJobs().Where(a => !a.Completed).ToList();
+            var jobs = Database.GetJobs().Where(a => !a.Completed).ToList();
 
             var assignedJob = jobs.FirstOrDefault(a => a.AssignedHost == hostName);
 
@@ -41,8 +36,8 @@ namespace FileClassifier.JobManager.REST.Controllers
 
             // Assign the first unassigned job to the hostName
             unassignedJob.AssignedHost = hostName;
-            
-            _database.UpdateJob(unassignedJob);
+
+            Database.UpdateJob(unassignedJob);
 
             return unassignedJob;
         }
@@ -51,7 +46,7 @@ namespace FileClassifier.JobManager.REST.Controllers
         [RequestSizeLimit(100_000_000)]
         public void UpdateWork([FromBody]Jobs job)
         {
-            _database.UpdateJob(job);
+            Database.UpdateJob(job);
         }
     }
 }

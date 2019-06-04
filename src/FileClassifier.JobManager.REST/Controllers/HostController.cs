@@ -9,25 +9,20 @@ namespace FileClassifier.JobManager.REST.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HostController : ControllerBase
+    public class HostController : BaseController
     {
-        private readonly IDatabase _database;
-
-        public HostController(IDatabase database)
-        {
-            _database = database;
-        }
-
+        public HostController(IDatabase database) : base(database) { }
+    
         [HttpPost]
         public void Post([FromBody]Hosts host)
         {
-            _database.AddUpdateHost(host);       
+            Database.AddUpdateHost(host);       
         }
 
         [HttpDelete]
         public void DeleteHost(Guid id)
         {
-            _database.DeleteHost(id);
+            Database.DeleteHost(id);
         }
     }
 }
