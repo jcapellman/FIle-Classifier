@@ -28,6 +28,26 @@
 
 <hr />
 
+<h3>Submit New Job</h3>
+
+<form asp-action="AddJob" asp-controller="Home" method="get" class="form-inline">
+    <div class="form-group" style="margin-right: 10px">
+        <input type="text" placeholder="name" name="name" id="name" class="form-control" style="max-width: 200px" />
+    </div>
+    
+    <div class="form-group" style="margin-right: 10px">
+        <input type="text" placeholder="model type" name="modelType" id="modelType" class="form-control" style="max-width: 200px"/>
+    </div>
+    
+    <div class="form-group" style="margin-right: 10px">
+        <input type="text" placeholder="training data path" name="trainingDataPath" id="trainingDataPath" class="form-control" style="max-width: 200px"/>
+    </div>
+
+    <button type="submit" class="btn btn-secondary">Add Job</button>
+</form>
+
+<hr />
+
 <h3>Jobs</h3>
 <table class="table table-striped table-dark">
     <thead>
