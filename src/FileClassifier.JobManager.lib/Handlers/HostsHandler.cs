@@ -1,52 +1,14 @@
-﻿using System;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using FileClassifier.JobManager.lib.Databases.Tables;
-
-using Newtonsoft.Json;
+using FileClassifier.JobManager.lib.Handlers.Base;
 
 namespace FileClassifier.JobManager.lib.Handlers
 {
-    public class HostsHandler
+    public class HostsHandler : BaseHandler
     {
-        private readonly string _rootURL;
-
-        public HostsHandler(string rootURL)
-        {
-            _rootURL = rootURL;
-        }
-
-        public async Task<bool> AddUpdateHostAsync(Hosts host)
-        {
-            try
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.BaseAddress = new Uri(_rootURL);
-
-                    var json = JsonConvert.SerializeObject(host);
-
-                    var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-                    var response = httpClient.PostAsync("Host", stringContent).Result;
-
-                    var responseBody = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return true;
-                    }
-
-                    return false;
-                }
-            } catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-
-                return false;
-            }
-        }
+        public HostsHandler(string rootUrl) : base(rootUrl) { }
+    
+        public async Task<bool> AddUpdateHostAsync(Hosts host) => await PostAsync<Hosts>("Hosts", host);
     }
 }
