@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Linq;
 
 using FileClassifier.JobManager.lib.Databases.Base;
 using FileClassifier.JobManager.lib.Databases.Tables;
 using FileClassifier.JobManager.REST.Models;
 
+using FileClassifier.lib.Enums;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FileClassifier.JobManager.REST.Controllers
 {
@@ -14,7 +18,8 @@ namespace FileClassifier.JobManager.REST.Controllers
     
         public IActionResult Index() => View("Index", new HomeDashboardModel {
             Jobs = Database.GetJobs(),
-            Hosts = Database.GetHosts()
+            Hosts = Database.GetHosts(),
+            ModelTypes = Enum.GetNames(typeof(ModelType)).OrderBy(a => a).Select(a => new SelectListItem(a, a)).ToList()
         });
 
         [HttpGet]
