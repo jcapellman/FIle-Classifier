@@ -48,6 +48,17 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
                 return false;
             }
 
+            if (!Directory.Exists(work.TrainingDataPath))
+            {
+                work.Completed = true;
+                work.Debug = $"Path ({work.TrainingDataPath}) does not exist";
+                work.CompletedTime = DateTime.Now;
+
+                result = await workerHandler.UpdateWorkAsync(work);
+
+                return false;
+            }
+
             var options = new TrainerCommandLineOptions
             {
                 FolderOfData = work.TrainingDataPath,

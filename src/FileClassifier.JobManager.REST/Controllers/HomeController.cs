@@ -43,7 +43,9 @@ namespace FileClassifier.JobManager.REST.Controllers
         {
             var job = Database.GetJob(id);
 
-            return File(job.Model, System.Net.Mime.MediaTypeNames.Application.Octet, $"{job.Name}.mdl");
+            return job == null ? 
+                File(new byte[0], System.Net.Mime.MediaTypeNames.Text.Plain, "Model not found") : 
+                File(job.Model, System.Net.Mime.MediaTypeNames.Application.Octet, $"{job.Name}.mdl");
         }
     }
 }

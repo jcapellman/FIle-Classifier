@@ -27,5 +27,7 @@ namespace FileClassifier.JobManager.lib.Databases.Tables
         public byte[] Model { get; set; }
 
         public string ModelEvaluationMetrics { get; set; }
+
+        public string Debug { get; set; }
     }
 }
