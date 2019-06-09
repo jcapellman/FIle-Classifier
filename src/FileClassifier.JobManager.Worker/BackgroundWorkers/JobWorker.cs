@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
+using FileClassifier.JobManager.lib.Databases;
 using FileClassifier.JobManager.lib.Databases.Tables;
 using FileClassifier.JobManager.lib.Handlers;
 using FileClassifier.JobManager.Worker.Common;
@@ -91,9 +92,21 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
             if (result)
             {
                 Console.WriteLine($"Successfully trained model and saved to {outputFile}");
+            } else
+            {
+                AddToPending(work);
             }
 
             return result;
+        }
+
+        private void AddToPending(Jobs work)
+        {
+            var db = new LiteDBDatabase();
+
+            db.AddOfflineSubmission(work);
+
+            // LOG HERE
         }
     }
 }
