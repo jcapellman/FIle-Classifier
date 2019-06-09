@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NLog" Version="4.6.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FileClassifier.JobManager.lib\FileClassifier.JobManager.lib.csproj" />
     <ProjectReference Include="..\FileClassifier.lib\FileClassifier.lib.csproj" />
   </ItemGroup>

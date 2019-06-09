@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design">
       <Version>2.2.3</Version>
     </PackageReference>
+    <PackageReference Include="NLog" Version="4.6.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FileClassifier.JobManager.lib\FileClassifier.JobManager.lib.csproj" />
