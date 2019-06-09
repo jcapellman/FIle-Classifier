@@ -8,14 +8,17 @@ using FileClassifier.JobManager.lib.Handlers;
 using FileClassifier.JobManager.Worker.Common;
 
 using Newtonsoft.Json;
+using NLog;
 
 namespace FileClassifier.JobManager.Worker.BackgroundWorkers
 {
     public class PendingSubmissionsWorker
     {
+        private Logger Log = LogManager.GetCurrentClassLogger();
+
         private BackgroundWorker _bwCheckin;
 
-        private LiteDBDatabase _db;
+        private readonly LiteDBDatabase _db;
 
         private string _serverURL;
 
@@ -48,11 +51,14 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
 
             if (!pendingJobs.Any())
             {
+                Log.Debug("No Pending Jobs found");
+
                 return;
             }
 
-            var workerHandler = new WorkerHandler(_serverURL);
+            Log.Debug($"{pendingJobs.Count} pending jobs found...");
 
+            var workerHandler = new WorkerHandler(_serverURL);
 
             foreach (var pJob in pendingJobs)
             {
@@ -63,12 +69,12 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
                     job = JsonConvert.DeserializeObject<Jobs>(pJob.JobJSON);
                 } catch (Exception ex)
                 {
-                    // LOG HERE
+                    Log.Error($"For Job ID {pJob.ID}, could not parse {pJob.JobJSON} into a Jobs object due to {ex}");
                 }
 
                 if (job == null)
                 {
-                    // LOG HERE
+                    Log.Error($"Job was null - removing {pJob.ID} from Queue");
 
                     _db.RemoveOfflineSubmission(pJob.ID);
 
@@ -79,12 +85,14 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
 
                 if (result)
                 {
+                    Log.Debug($"{job.ID} was successfully uploaded");
+
                     _db.RemoveOfflineSubmission(pJob.ID);
 
                     continue;
                 }
 
-                // LOG HERE
+                Log.Debug($"{job.ID} was not able to be uploaded - will retry at a later date and time");
             }            
         }
     }
