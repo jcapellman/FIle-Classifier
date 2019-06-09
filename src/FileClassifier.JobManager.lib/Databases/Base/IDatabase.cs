@@ -22,5 +22,11 @@ namespace FileClassifier.JobManager.lib.Databases.Base
         void DeleteHost(Guid id);
 
         List<Hosts> GetHosts();
+
+        List<PendingSubmissions> GetPendingSubmissions();
+
+        void AddOfflineSubmission(Jobs jobs);
+
+        void RemoveOfflineSubmission(Guid id);
     }
 }

@@ -6,6 +6,7 @@ using FileClassifier.JobManager.lib.Databases.Base;
 using FileClassifier.JobManager.lib.Databases.Tables;
 
 using LiteDB;
+using Newtonsoft.Json;
 
 namespace FileClassifier.JobManager.lib.Databases
 {
@@ -86,6 +87,36 @@ namespace FileClassifier.JobManager.lib.Databases
             using (var db = new LiteDatabase(DbFilename))
             {
                 return db.GetCollection<Hosts>().FindAll().ToList();
+            }
+        }
+
+        public List<PendingSubmissions> GetPendingSubmissions()
+        {
+            using (var db = new LiteDatabase(DbFilename))
+            {
+                return db.GetCollection<PendingSubmissions>().FindAll().ToList();
+            }
+        }
+
+        public void AddOfflineSubmission(Jobs job)
+        {
+            using (var db = new LiteDatabase(DbFilename))
+            {
+                var pendingSubmission = new PendingSubmissions
+                {
+                    ID = Guid.NewGuid(),
+                    JobJSON = JsonConvert.SerializeObject(job)
+                };
+
+                db.GetCollection<PendingSubmissions>().Insert(pendingSubmission);
+            }
+        }
+
+        public void RemoveOfflineSubmission(Guid id)
+        {
+            using (var db = new LiteDatabase(DbFilename))
+            {
+                db.GetCollection<PendingSubmissions>().Delete(a => a.ID == id);
             }
         }
     }
