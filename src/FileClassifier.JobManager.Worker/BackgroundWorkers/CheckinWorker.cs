@@ -9,7 +9,7 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
 {
     public class CheckinWorker
     {
-        private BackgroundWorker _bwCheckin;
+        private readonly BackgroundWorker _bwCheckin;
 
         private Hosts _host;
 
@@ -44,12 +44,14 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
             // Call to checkin with the server
             var checkinResult = await hostHandler.AddUpdateHostAsync(_host);
 
-            if (!checkinResult)
+            if (checkinResult)
             {
-                Console.WriteLine($"Failed to check in with {_serverURL}");
-
-                System.Threading.Thread.Sleep(Constants.LOOP_ERROR_INTERVAL_MS);
+                return;
             }
+
+            Console.WriteLine($"Failed to check in with {_serverURL}");
+
+            System.Threading.Thread.Sleep(Constants.LOOP_ERROR_INTERVAL_MS);
         }
     }
 }

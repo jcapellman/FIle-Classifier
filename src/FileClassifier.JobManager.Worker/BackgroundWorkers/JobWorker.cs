@@ -122,6 +122,11 @@ namespace FileClassifier.JobManager.Worker.BackgroundWorkers
 
                 result = await workerHandler.UpdateWorkAsync(work);
 
+                if (!result)
+                {
+                    AddToPending(work);
+                }
+
                 return false;
             }
 
