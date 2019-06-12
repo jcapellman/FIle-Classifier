@@ -6,10 +6,14 @@ using FileClassifier.JobManager.lib.Databases.Tables;
 
 using Microsoft.AspNetCore.Mvc;
 
+using NLog;
+
 namespace FileClassifier.JobManager.REST.Controllers
 {
     public class BaseController : Controller
     {
+        private readonly Logger Log = NLog.LogManager.GetCurrentClassLogger();
+
         protected readonly IDatabase Database;
 
         protected BaseController(IDatabase database)
@@ -37,17 +41,22 @@ namespace FileClassifier.JobManager.REST.Controllers
 
                     job.AssignedHost = host.Name;
 
+                    Log.Debug($"Assigned {job.ID} to {host.Name}");
+
                     break;
                 }
 
                 if (string.IsNullOrEmpty(job.AssignedHost))
                 {
                     job.AssignedHost = lib.Common.Constants.UNASSIGNED_JOB;
+                    Log.Debug($"No hosts found for {job.ID}");
                 }
             }
             else
             {
                 job.AssignedHost = lib.Common.Constants.UNASSIGNED_JOB;
+
+                Log.Debug($"No hosts found for {job.ID}");
             }
 
             Database.AddJob(job);
