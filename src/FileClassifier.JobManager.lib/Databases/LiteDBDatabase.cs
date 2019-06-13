@@ -8,69 +8,126 @@ using FileClassifier.JobManager.lib.Databases.Tables;
 using LiteDB;
 using Newtonsoft.Json;
 
+using NLog;
+
 namespace FileClassifier.JobManager.lib.Databases
 {
     public class LiteDBDatabase : IDatabase
     {
+        private readonly NLog.Logger Log = LogManager.GetCurrentClassLogger();
+
         private const string DbFilename = "data.db";
 
         public bool DeleteJob(Guid id)
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                return db.GetCollection<Jobs>().Delete(a => a.ID == id) > 0;
+                using (var db = new LiteDatabase(DbFilename))
+                {
+                    return db.GetCollection<Jobs>().Delete(a => a.ID == id) > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to delete {id}");
+
+                return false;
             }
         }
 
         public bool AddJob(Jobs item)
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                return db.GetCollection<Jobs>().Insert(item) != null;
+                using (var db = new LiteDatabase(DbFilename))
+                {
+                    return db.GetCollection<Jobs>().Insert(item) != null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to add job {item.ID}");
+
+                return false;
             }
         }
 
         public bool UpdateJob(Jobs item)
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                return db.GetCollection<Jobs>().Update(item);
+                using (var db = new LiteDatabase(DbFilename))
+                {
+                    return db.GetCollection<Jobs>().Update(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to update Job ({item.ID})");
+
+                return false;
             }
         }
 
         public Jobs GetJob(Guid id)
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                return db.GetCollection<Jobs>().FindOne(a => a.ID == id);
+                using (var db = new LiteDatabase(DbFilename))
+                {
+                    return db.GetCollection<Jobs>().FindOne(a => a.ID == id);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to get job ({id})");
+
+                return null;
             }
         }
 
         public List<Jobs> GetJobs()
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                return db.GetCollection<Jobs>().FindAll().ToList();
+                using (var db = new LiteDatabase(DbFilename))
+                {
+                    return db.GetCollection<Jobs>().FindAll().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to obtain jobs");
+
+                return null;
             }
         }
 
         public void AddUpdateHost(Hosts host)
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                host.LastConnected = DateTime.Now;
-
-                var dbHost = db.GetCollection<Hosts>().FindOne(a => a.Name == host.Name);
-
-                if (dbHost == null)
+                using (var db = new LiteDatabase(DbFilename))
                 {
-                    db.GetCollection<Hosts>().Insert(host);
-                } else
-                {
-                    host.ID = dbHost.ID;
+                    host.LastConnected = DateTime.Now;
 
-                    db.GetCollection<Hosts>().Update(host);
+                    var dbHost = db.GetCollection<Hosts>().FindOne(a => a.Name == host.Name);
+
+                    if (dbHost == null)
+                    {
+                        db.GetCollection<Hosts>().Insert(host);
+                    }
+                    else
+                    {
+                        host.ID = dbHost.ID;
+
+                        db.GetCollection<Hosts>().Update(host);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to add host {host.ID}");
             }
         }
 
