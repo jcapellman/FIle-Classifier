@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Runtime.CompilerServices;
 using FileClassifier.JobManager.lib.Databases.Base;
 using FileClassifier.JobManager.lib.Databases.Tables;
 
@@ -103,7 +103,7 @@ namespace FileClassifier.JobManager.lib.Databases
             }
         }
 
-        public void AddUpdateHost(Hosts host)
+        public bool AddUpdateHost(Hosts host)
         {
             try
             {
@@ -123,57 +123,108 @@ namespace FileClassifier.JobManager.lib.Databases
 
                         db.GetCollection<Hosts>().Update(host);
                     }
+
+                    return true;
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, $"Failed to add host {host.ID}");
+
+                return false;
             }
         }
 
-        public void DeleteHost(Guid id)
+        public bool DeleteHost(Guid id)
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                db.GetCollection<Hosts>().Delete(a => a.ID == id);
+                using (var db = new LiteDatabase(DbFilename))
+                {
+                    return db.GetCollection<Hosts>().Delete(a => a.ID == id) > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to delete {id}");
+
+                return false;
             }
         }
 
         public List<Hosts> GetHosts()
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                return db.GetCollection<Hosts>().FindAll().ToList();
+                using (var db = new LiteDatabase(DbFilename))
+                {
+                    return db.GetCollection<Hosts>().FindAll().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to get hosts");
+
+                return null;
             }
         }
 
         public List<PendingSubmissions> GetPendingSubmissions()
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                return db.GetCollection<PendingSubmissions>().FindAll().ToList();
-            }
-        }
-
-        public void AddOfflineSubmission(Jobs job)
-        {
-            using (var db = new LiteDatabase(DbFilename))
-            {
-                var pendingSubmission = new PendingSubmissions
+                using (var db = new LiteDatabase(DbFilename))
                 {
-                    ID = Guid.NewGuid(),
-                    JobJSON = JsonConvert.SerializeObject(job)
-                };
+                    return db.GetCollection<PendingSubmissions>().FindAll().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to get Pending Submissions");
 
-                db.GetCollection<PendingSubmissions>().Insert(pendingSubmission);
+                return null;
             }
         }
 
-        public void RemoveOfflineSubmission(Guid id)
+        public bool AddOfflineSubmission(Jobs job)
         {
-            using (var db = new LiteDatabase(DbFilename))
+            try
             {
-                db.GetCollection<PendingSubmissions>().Delete(a => a.ID == id);
+                using (var db = new LiteDatabase(DbFilename))
+                {
+                    var pendingSubmission = new PendingSubmissions
+                    {
+                        ID = Guid.NewGuid(),
+                        JobJSON = JsonConvert.SerializeObject(job)
+                    };
+
+                    db.GetCollection<PendingSubmissions>().Insert(pendingSubmission);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to add to offline {job.ID}");
+
+                return false;
+            }
+        }
+
+        public bool RemoveOfflineSubmission(Guid id)
+        {
+            try
+            {
+                using (var db = new LiteDatabase(DbFilename))
+                {
+                    return db.GetCollection<PendingSubmissions>().Delete(a => a.ID == id) > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to remove offline submission {id}");
+
+                return false;
             }
         }
     }
