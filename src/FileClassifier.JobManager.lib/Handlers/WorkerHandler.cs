@@ -11,6 +11,6 @@ namespace FileClassifier.JobManager.lib.Handlers
     
         public async Task<Jobs> GetWorkAsync(string hostName) => await GetAsync<Jobs>($"Worker?hostName={hostName}");
 
-        public async Task<bool> UpdateWorkAsync(Jobs job) => await PostAsync<Jobs>("Worker", job);
+        public async Task<bool> UpdateWorkAsync(Jobs job) => await PostAsync("Worker", job);
     }
 }

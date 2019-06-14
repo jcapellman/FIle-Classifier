@@ -9,11 +9,11 @@ namespace FileClassifier.JobManager.lib.Handlers.Base
 {
     public class BaseHandler
     {
-        private readonly string _rootURL;
+        private readonly string _rootUrl;
 
-        protected BaseHandler(string rootURL)
+        protected BaseHandler(string rootUrl)
         {
-            _rootURL = rootURL;
+            _rootUrl = rootUrl;
         }
 
         protected async Task<T> GetAsync<T>(string url)
@@ -22,7 +22,7 @@ namespace FileClassifier.JobManager.lib.Handlers.Base
             {
                 using (var httpClient = new HttpClient())
                 {
-                    httpClient.BaseAddress = new Uri(_rootURL);
+                    httpClient.BaseAddress = new Uri(_rootUrl);
 
                     var response = httpClient.GetAsync(url).Result;
 
@@ -45,15 +45,15 @@ namespace FileClassifier.JobManager.lib.Handlers.Base
             {
                 using (var httpClient = new HttpClient())
                 {
-                    httpClient.BaseAddress = new Uri(_rootURL);
+                    httpClient.BaseAddress = new Uri(_rootUrl);
 
                     var json = JsonConvert.SerializeObject(data);
 
                     var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    var response = httpClient.PostAsync(url, stringContent).Result;
+                    var response = await httpClient.PostAsync(url, stringContent);
 
-                    var responseBody = await response.Content.ReadAsStringAsync();
+                    await response.Content.ReadAsStringAsync();
 
                     return response.IsSuccessStatusCode;
                 }
